@@ -1,0 +1,10 @@
+// protoc --gofast_out=. events.proto
+syntax = "proto3";
+
+package checkpoint;
+
+message CheckpointCreated {
+  string CheckpointID = 1;
+  string Name = 2;
+  uint32 Version = 255;
+}

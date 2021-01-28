@@ -1,0 +1,13 @@
+// protoc --gofast_out=. events.proto
+syntax = "proto3";
+
+package result;
+
+message ResultCreated {
+  string ResultID = 1;
+  string CheckpointID = 2;
+  string SportsmenID = 3;
+  string EventStateID = 4;
+  string Time = 5;
+  uint32 Version = 255;
+}
