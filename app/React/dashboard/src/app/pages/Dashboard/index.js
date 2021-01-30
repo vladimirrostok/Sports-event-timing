@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Results from "../../components/Results";
 
-const baseURL = "ws://localhost:8080/dashboard";
+const baseURL = "wss://localhost:8000/dashboard";
 
 const Dashboard = () => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
+    // in order to handle self-signed certificates we need to turn off the validation
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     let ws = new WebSocket(baseURL);
 
     ws.onopen = (evt) => {

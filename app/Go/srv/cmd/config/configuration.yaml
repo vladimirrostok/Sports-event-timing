@@ -1,0 +1,11 @@
+---
+db_host: live-postgres
+db_driver: postgres
+db_username: postgres
+db_password: password
+db_name: users_db
+db_port: 5432
+
+api_address: :8000
+
+test_api_address: test-service:10000
