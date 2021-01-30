@@ -75,9 +75,8 @@ func (d *Dashboard) disconnect(conn *Connection) {
 
 func (d *Dashboard) broadcast(result *Result) {
 	log.Printf("Broadcast result: %s, %s, %s, %s",
-		result.CheckpointID,
-		result.SportsmenID,
-		result.EventStateID,
+		result.SportsmenStartNumber,
+		result.SportsmenName,
 		result.Time)
 	for _, conn := range d.connHub {
 		conn.Write(result)

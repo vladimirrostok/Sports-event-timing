@@ -1,18 +1,19 @@
 import React from "react";
+import MaterialTable from "material-table";
 
 const Results = ({ results }) => {
   return (
-    <>
-      {results &&
-        results.map((result) => (
-          <p key={result.id}>
-            <strong>
-              {result.id},{result.checkpoint_id},{result.sportsmen_id},
-              {result.event_state_id}
-            </strong>
-          </p>
-        ))}
-    </>
+    <div style={{ maxWidth: "100%" }}>
+      <MaterialTable
+        columns={[
+          { title: "Start number", field: "sportsmen_id" },
+          { title: "Name", field: "sportsmen_name" },
+          { title: "Time", field: "finish_time" },
+        ]}
+        data={results}
+        title="Results"
+      />
+    </div>
   );
 };
 

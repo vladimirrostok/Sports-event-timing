@@ -15,7 +15,7 @@ const Dashboard = () => {
 
     ws.onclose = (evt) => {
       console.log("WebSocket closed!", { evt });
-      this.setState({ ws: undefined });
+      ws = undefined;
     };
 
     ws.onmessage = (msg) => {
@@ -31,8 +31,6 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <h1>Sports events dashboard</h1>
-      {console.log(123)}
-      {console.log(results)}
       {results && <Results results={results} />}
     </div>
   );

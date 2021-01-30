@@ -23,8 +23,7 @@ func (c *Connection) Read() {
 			c.Global.results <- NewResult(
 				"7d09c3f5-f50d-402b-9f4b-756030320264",
 				"1",
-				"1",
-				"1",
+				"John Wills",
 				"2021-01-27 10:23:24")
 		}
 	}
