@@ -13,9 +13,9 @@ func GetDBConnection(driver, username, password, port, host, database string) (*
 	DB, err := gorm.Open(driver, DBURL)
 	if err != nil {
 		fmt.Printf("Cannot connect to %s database", driver)
-		log.Fatal("Error:", err)
+		log.Fatalln("Error:", err)
 	} else {
-		fmt.Printf("Connected to the %s database \n", driver)
+		fmt.Printf("Connected to the %s database ", driver)
 	}
 
 	return DB, nil
