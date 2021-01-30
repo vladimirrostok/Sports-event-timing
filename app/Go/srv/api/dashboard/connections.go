@@ -1,4 +1,4 @@
-package main
+package dashboard
 
 import (
 	"encoding/json"
@@ -20,7 +20,7 @@ func (c *Connection) Read() {
 			log.Println("Error on read message:", err.Error())
 			break
 		} else {
-			c.Global.results <- NewResult(
+			c.Global.Results <- NewResult(
 				"7d09c3f5-f50d-402b-9f4b-756030320264",
 				"1",
 				"John Wills",
@@ -29,7 +29,7 @@ func (c *Connection) Read() {
 	}
 
 	c.Conn.Close()
-	c.Global.leave <- c
+	c.Global.Leave <- c
 }
 
 func (c *Connection) Write(message *Result) {

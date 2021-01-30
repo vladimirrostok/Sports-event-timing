@@ -1,4 +1,4 @@
-package main
+package dashboard
 
 type Result struct {
 	ID                   string `json:"id"`
