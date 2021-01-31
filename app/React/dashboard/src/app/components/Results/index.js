@@ -8,7 +8,7 @@ const Results = ({ results }) => {
         columns={[
           { title: "Start number", field: "sportsmen_id" },
           { title: "Name", field: "sportsmen_name" },
-          { title: "Time", field: "finish_time" },
+          { title: "Time", field: "time_finish" },
         ]}
         data={results}
         title="Results"

@@ -13,7 +13,7 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreated, error) {
 		validation.Field(&pendingResult.ID, validation.Required, is.UUIDv4),
 		validation.Field(&pendingResult.CheckpointID, validation.Required, is.UUIDv4),
 		validation.Field(&pendingResult.SportsmenID, validation.Required, is.UUIDv4),
-		validation.Field(&pendingResult.EventStateID, validation.Required, is.UUIDv4),
+		validation.Field(&pendingResult.TimeStart, validation.Required),
 	); err != nil {
 		return nil, err
 	}
@@ -22,8 +22,7 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreated, error) {
 		ID:           pendingResult.ID,
 		CheckpointID: pendingResult.CheckpointID,
 		SportsmenID:  pendingResult.SportsmenID,
-		EventStateID: pendingResult.EventStateID,
-		Time:         pendingResult.Time,
+		TimeStart:    pendingResult.TimeStart,
 		Version:      1,
 	}
 
@@ -31,8 +30,7 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreated, error) {
 		ID:           newResult.ID,
 		CheckpointID: newResult.CheckpointID,
 		SportsmenID:  newResult.SportsmenID,
-		EventStateID: newResult.EventStateID,
-		Time:         newResult.Time,
+		TimeStart:    newResult.TimeStart,
 		Version:      1,
 	}).Error; err != nil {
 		return nil, err
@@ -42,8 +40,7 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreated, error) {
 		ResultID:     newResult.ID.String(),
 		CheckpointID: newResult.CheckpointID.String(),
 		SportsmenID:  newResult.SportsmenID.String(),
-		EventStateID: newResult.EventStateID.String(),
-		Time:         newResult.Time.String(),
+		TimeStart:    newResult.TimeStart.String(),
 		Version:      1,
 	}, nil
 }

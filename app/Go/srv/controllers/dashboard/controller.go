@@ -67,8 +67,8 @@ func (d *Dashboard) Run(db *gorm.DB) {
 		msg := ResultMessage{
 			ID:                   result.ID.String(),
 			SportsmenStartNumber: result.SportsmenID.String(),
-			SportsmenName:        result.EventStateID.String(),
-			Time:                 result.Time.String(),
+			SportsmenName:        result.SportsmenID.String(),
+			TimeStart:            result.TimeStart.String(),
 		}
 		resultsMessages = append(resultsMessages, msg)
 	}
@@ -109,7 +109,7 @@ func (d *Dashboard) broadcast(result *ResultMessage) {
 	zap.S().Infof("Broadcast result: %s, %s, %s",
 		result.SportsmenStartNumber,
 		result.SportsmenName,
-		result.Time)
+		result.TimeStart)
 	for _, conn := range d.ConnHub {
 		conn.Write(result)
 	}

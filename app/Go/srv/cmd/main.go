@@ -8,7 +8,6 @@ import (
 	"go.uber.org/zap/zapcore"
 	"net/http"
 	"sports/backend/domain/models/checkpoint"
-	"sports/backend/domain/models/eventstate"
 	"sports/backend/domain/models/result"
 	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/cmd/config"
@@ -83,7 +82,6 @@ func initializeAPI(server *server.Server, driver, username, password, port, host
 		&result.Result{},
 		&checkpoint.Checkpoint{},
 		&sportsmen.Sportsmen{},
-		&eventstate.EventState{},
 	)
 
 	server.Router = mux.NewRouter()
@@ -143,10 +141,7 @@ func main() {
 }
 
 func run(srv *server.Server) error {
-	defer func() {
-		zap.S().Info("Closing DB connection")
-		srv.DB.Close()
-	}()
+	defer srv.DB.Close()
 
 	go srv.Dashboard.Run(srv.DB)
 

@@ -27,7 +27,7 @@ func GetResult(db gorm.DB, pk uuid.UUID, version *uint32) (*Result, error) {
 func GetLastTenResults(db gorm.DB) (*[]Result, error) {
 	var results []Result
 
-	err := db.Order("time desc").Limit(10).Find(&results).Error
+	err := db.Order("time_start desc").Limit(10).Find(&results).Error
 	if gorm.IsRecordNotFoundError(err) {
 		return &results, nil
 	} else if err != nil {

@@ -33,7 +33,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 		err = validation.ValidateStruct(&req,
 			validation.Field(&req.CheckpointID, validation.Required, is.UUIDv4),
 			validation.Field(&req.SportsmenID, validation.Required, is.UUIDv4),
-			validation.Field(&req.EventStateID, validation.Required, is.UUIDv4),
+			validation.Field(&req.Time, validation.Required),
 		)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -44,13 +44,12 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			ID:           uuid.Must(uuid.NewV4()),
 			CheckpointID: uuid.Must(uuid.FromString(req.CheckpointID)),
 			SportsmenID:  uuid.Must(uuid.FromString(req.SportsmenID)),
-			EventStateID: uuid.Must(uuid.FromString(req.EventStateID)),
-			Time:         nil,
+			TimeStart:    nil,
 		}
 
 		if req.Time != "" {
 			t, err := time.Parse(time.RFC3339, req.Time)
-			newResult.Time = &t
+			newResult.TimeStart = &t
 			if err != nil {
 				responses.ERROR(w, http.StatusUnprocessableEntity, err)
 				return
@@ -59,7 +58,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 
 		_, err = result.Create(*server.DB, newResult)
 		if err != nil {
-			responses.ERROR(w, http.StatusInternalServerError, nil)
+			responses.ERROR(w, http.StatusInternalServerError, err)
 			return
 		}
 
@@ -67,7 +66,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			ID:                   newResult.ID.String(),
 			SportsmenName:        newResult.ID.String(),
 			SportsmenStartNumber: newResult.ID.String(),
-			Time:                 newResult.Time.String(),
+			TimeStart:            newResult.TimeStart.String(),
 		}
 
 		responses.JSON(w, http.StatusOK, nil)
