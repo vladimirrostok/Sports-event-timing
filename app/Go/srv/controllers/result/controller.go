@@ -2,19 +2,22 @@ package result_controller
 
 import (
 	"encoding/json"
+	"fmt"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/gofrs/uuid"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"sports/backend/domain/models/result"
+	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/responses"
 	"sports/backend/srv/server"
 	"time"
 )
 
-// AddResult handles the new result.
+// AddResult handles the new result request.
 func AddResult(server *server.Server) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)
@@ -23,7 +26,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			return
 		}
 
-		req := NewResult{}
+		req := NewResultRequest{}
 		err = json.Unmarshal(body, &req)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
@@ -62,10 +65,16 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			return
 		}
 
+		version := uint32(1)
+		sportsmenFetched, err := sportsmen.GetSportsmen(*server.DB, newResult.SportsmenID, &version)
+		if err != nil {
+			zap.S().Fatal(err)
+		}
+
 		server.Dashboard.Results <- dashboard_controller.ResultMessage{
 			ID:                   newResult.ID.String(),
-			SportsmenName:        newResult.ID.String(),
-			SportsmenStartNumber: newResult.ID.String(),
+			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
+			SportsmenStartNumber: string(sportsmenFetched.StartNumber),
 			TimeStart:            newResult.TimeStart.String(),
 		}
 

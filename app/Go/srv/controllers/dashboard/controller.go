@@ -14,6 +14,7 @@ type Dashboard struct {
 	LastResults *[]ResultMessage
 	ConnHub     map[string]*Connection
 	Results     chan ResultMessage
+	Finish      chan FinishMessage
 	Join        chan *Connection
 	Leave       chan *Connection
 }

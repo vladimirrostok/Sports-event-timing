@@ -6,3 +6,8 @@ type ResultMessage struct {
 	SportsmenName        string `json:"sportsmen_name"`
 	TimeStart            string `json:"time_start"`
 }
+
+type FinishMessage struct {
+	ID        string `json:"id"`
+	TimeStart string `json:"time_finish"`
+}
