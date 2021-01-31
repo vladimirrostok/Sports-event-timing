@@ -27,14 +27,13 @@ func GetResult(db gorm.DB, pk uuid.UUID, version *uint32) (*Result, error) {
 func GetLastTenResults(db gorm.DB) (*[]Result, error) {
 	var results []Result
 
-	err := db.Limit(10).Find(&results).Error
+	err := db.Order("time desc").Limit(10).Find(&results).Error
 	if gorm.IsRecordNotFoundError(err) {
-		return nil, fmt.Errorf("Results not found: %w", NotFound{})
+		return &results, nil
 	} else if err != nil {
 		zap.S().Info(err)
 		return nil, fmt.Errorf("Error loading results: %w", err)
 	}
 
 	return &results, nil
-
 }

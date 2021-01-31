@@ -1,4 +1,4 @@
-package dashboard
+package dashboard_controller
 
 import (
 	"encoding/json"
@@ -18,12 +18,6 @@ func (c *Connection) Read() {
 		if _, _, err := c.Conn.ReadMessage(); err != nil {
 			zap.S().Info("Error on read message:", err.Error())
 			break
-		} else {
-			c.Global.Results <- NewResult(
-				"7d09c3f5-f50d-402b-9f4b-756030320264",
-				"1",
-				"John Wills",
-				"2021-01-27 10:23:24")
 		}
 	}
 
@@ -31,7 +25,7 @@ func (c *Connection) Read() {
 	c.Global.Leave <- c
 }
 
-func (c *Connection) Write(message *Result) {
+func (c *Connection) Write(message *ResultMessage) {
 	b, err := json.Marshal(message)
 	if err != nil {
 		zap.S().Fatal(err)

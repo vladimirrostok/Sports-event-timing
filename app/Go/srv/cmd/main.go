@@ -109,11 +109,11 @@ func main() {
 	}
 
 	// Set up the dashboard Websocket API module
-	dashboard := &dashboard.Dashboard{
-		ConnHub: make(map[string]*dashboard.Connection),
-		Results: make(chan *dashboard.Result),
-		Join:    make(chan *dashboard.Connection),
-		Leave:   make(chan *dashboard.Connection),
+	dashboard := &dashboard_controller.Dashboard{
+		ConnHub: make(map[string]*dashboard_controller.Connection),
+		Results: make(chan dashboard_controller.ResultMessage),
+		Join:    make(chan *dashboard_controller.Connection),
+		Leave:   make(chan *dashboard_controller.Connection),
 	}
 
 	srv := server.Server{}
@@ -143,7 +143,12 @@ func main() {
 }
 
 func run(srv *server.Server) error {
-	go srv.Dashboard.Run()
+	defer func() {
+		zap.S().Info("Closing DB connection")
+		srv.DB.Close()
+	}()
+
+	go srv.Dashboard.Run(srv.DB)
 
 	zap.S().Infof("Server listening on %s", srv.Addr)
 

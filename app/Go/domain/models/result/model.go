@@ -11,7 +11,7 @@ type Result struct {
 	CheckpointID uuid.UUID  `gorm:"not null" json:"checkpoint_id"`
 	SportsmenID  uuid.UUID  `gorm:"not null" json:"sportsmen_id"`
 	EventStateID uuid.UUID  `gorm:"not null" json:"event_state_id"`
-	Time         *time.Time `json:"created_at"`
+	Time         *time.Time `json:"time"`
 	CreatedAt    time.Time  `gorm:"default:now();not null" json:"created_at"`
 	Version      uint32     `gorm:"not null" json:"version"`
 }

@@ -1,18 +1,21 @@
-package dashboard
+package dashboard_controller
 
 import (
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/jinzhu/gorm"
 	"go.uber.org/zap"
 	"net/http"
+	"sports/backend/domain/models/result"
 )
 
 type Dashboard struct {
-	ConnHub map[string]*Connection
-	Results chan *Result
-	Join    chan *Connection
-	Leave   chan *Connection
+	LastResults *[]ResultMessage
+	ConnHub     map[string]*Connection
+	Results     chan ResultMessage
+	Join        chan *Connection
+	Leave       chan *Connection
 }
 
 var upgrader = websocket.Upgrader{
@@ -42,18 +45,42 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 		Global: d,
 	}
 
+	for _, msg := range *d.LastResults {
+		conn.Write(&msg)
+	}
+
 	d.Join <- conn
 
 	conn.Read()
 }
 
-func (d *Dashboard) Run() {
+func (d *Dashboard) Run(db *gorm.DB) {
+	lastResults, err := result.GetLastTenResults(*db)
+	if err != nil {
+		zap.S().Error(err)
+	}
+
+	// Convert domain results into application level results.
+	// Load results from DB on app startup.
+	var resultsMessages []ResultMessage
+	for _, result := range *lastResults {
+		msg := ResultMessage{
+			ID:                   result.ID.String(),
+			SportsmenStartNumber: result.SportsmenID.String(),
+			SportsmenName:        result.EventStateID.String(),
+			Time:                 result.Time.String(),
+		}
+		resultsMessages = append(resultsMessages, msg)
+	}
+
+	d.LastResults = &resultsMessages
+
 	for {
 		select {
 		case conn := <-d.Join:
 			d.add(conn)
 		case result := <-d.Results:
-			d.broadcast(result)
+			d.broadcast(&result)
 		case conn := <-d.Leave:
 			d.disconnect(conn)
 		}
@@ -74,7 +101,11 @@ func (d *Dashboard) disconnect(conn *Connection) {
 	}
 }
 
-func (d *Dashboard) broadcast(result *Result) {
+func (d *Dashboard) broadcast(result *ResultMessage) {
+	// Update stored results to return latest data to recently joined customers.
+	updatedResults := append(*d.LastResults, *result)
+	d.LastResults = &updatedResults
+
 	zap.S().Infof("Broadcast result: %s, %s, %s",
 		result.SportsmenStartNumber,
 		result.SportsmenName,

@@ -17,7 +17,7 @@ type HTTPClient interface {
 
 // Server is a wrapper for the service context.
 type Server struct {
-	Dashboard  *dashboard.Dashboard
+	Dashboard  *dashboard_controller.Dashboard
 	DB         *gorm.DB
 	Router     *mux.Router
 	HTTPClient HTTPClient

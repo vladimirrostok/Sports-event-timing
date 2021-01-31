@@ -63,7 +63,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			return
 		}
 
-		server.Dashboard.Results <- &dashboard.Result{
+		server.Dashboard.Results <- dashboard_controller.ResultMessage{
 			ID:                   newResult.ID.String(),
 			SportsmenName:        newResult.ID.String(),
 			SportsmenStartNumber: newResult.ID.String(),
