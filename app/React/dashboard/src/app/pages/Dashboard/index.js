@@ -7,8 +7,6 @@ const Dashboard = () => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    // in order to handle self-signed certificates we need to turn off the validation
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     let ws = new WebSocket(baseURL);
 
     ws.onopen = (evt) => {
@@ -22,7 +20,7 @@ const Dashboard = () => {
 
     ws.onmessage = (msg) => {
       console.log("Websocket message:", { msg });
-      setResults(results.concat([JSON.parse(msg.data)]));
+      updateResults(msg);
     };
 
     ws.onerror = (err) => {
@@ -34,8 +32,13 @@ const Dashboard = () => {
     <div className="dashboard">
       <h1>Sports events dashboard</h1>
       {results && <Results results={results} />}
+      {console.log(results)}
     </div>
   );
+
+  function updateResults(msg) {
+    setResults((prevArray) => [...prevArray, JSON.parse(msg.data)]);
+  }
 };
 
 export default Dashboard;
