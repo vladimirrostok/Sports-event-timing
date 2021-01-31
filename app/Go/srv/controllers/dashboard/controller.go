@@ -54,10 +54,10 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	conn.Read()
 }
 
-func (d *Dashboard) Run(db *gorm.DB) {
+func (d *Dashboard) Run(db *gorm.DB) error {
 	lastResults, err := result.GetLastTenResults(*db)
 	if err != nil {
-		zap.S().Error(err)
+		return err
 	}
 
 	// Convert domain results into application level results.

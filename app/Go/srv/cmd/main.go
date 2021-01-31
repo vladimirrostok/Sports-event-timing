@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
 	"crypto/tls"
 	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"log"
+	"net"
 	"net/http"
+	"os"
+	"os/signal"
 	"sports/backend/domain/models/checkpoint"
 	"sports/backend/domain/models/result"
 	"sports/backend/domain/models/sportsmen"
@@ -15,6 +20,8 @@ import (
 	"sports/backend/srv/routes"
 	"sports/backend/srv/server"
 	"sports/backend/srv/utils"
+	"syscall"
+	"time"
 )
 
 var cfg config.Config
@@ -86,7 +93,6 @@ func initializeAPI(server *server.Server, driver, username, password, port, host
 
 	server.Router = mux.NewRouter()
 	routes.InitializeRoutes(server)
-	server.HTTPClient = &http.Client{}
 
 	return nil
 }
@@ -134,23 +140,77 @@ func main() {
 	// Disable cert verification to use self-signed certificates for internal service needs.
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	err = run(&srv)
-	if err != nil {
-		zap.S().Fatal(err)
-	}
+	run(&srv)
 }
 
-func run(srv *server.Server) error {
+func run(srv *server.Server) {
 	defer srv.DB.Close()
 
-	go srv.Dashboard.Run(srv.DB)
+	ctx, cancel := context.WithCancel(context.Background())
 
 	zap.S().Infof("Server listening on %s", srv.Addr)
 
-	zap.S().Fatal(http.ListenAndServeTLS(srv.Addr,
-		"./srv/rsa.crt",
-		"./srv/rsa.key",
-		srv.Router))
+	httpSrv := &http.Server{
+		Addr:        srv.Addr,
+		Handler:     srv.Router,
+		BaseContext: func(_ net.Listener) context.Context { return ctx },
+	}
 
-	return nil
+	httpSrv.RegisterOnShutdown(cancel)
+
+	// Provide channel for errors from the API goroutines.
+	errors := make(chan error, 0)
+
+	// Start the Websocket module.
+	go func() {
+		err := srv.Dashboard.Run(srv.DB)
+		if err != nil {
+			errors <- err
+			return
+		}
+	}()
+
+	// Start the API.
+	go func() {
+		if err := httpSrv.ListenAndServeTLS(
+			"./srv/rsa.crt",
+			"./srv/rsa.key"); err != nil {
+			errors <- err
+			return
+		}
+	}()
+
+	// Provide channel for OS process termination signals.
+	signalChan := make(chan os.Signal, 1)
+
+	// Listen to the OS termination signals.
+	signal.Notify(
+		signalChan,
+		syscall.SIGHUP,  // kill -SIGHUP XXXX
+		syscall.SIGINT,  // kill -SIGINT XXXX or Ctrl+c
+		syscall.SIGQUIT, // kill -SIGQUIT XXXX
+	)
+
+	// Block till err/termination chan comes in.
+	select {
+	case err := <-errors:
+		zap.S().Fatal(err)
+	case <-signalChan:
+		log.Print("os.Interrupt - shutting down...\n")
+	}
+
+	// Gracefully shutdown the server when error/exit happens.
+	gracefullCtx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancelShutdown()
+
+	if err := httpSrv.Shutdown(gracefullCtx); err != nil {
+		log.Printf("shutdown error: %v\n", err)
+		defer os.Exit(1)
+		return
+	} else {
+		log.Printf("gracefully stopped\n")
+	}
+
+	defer os.Exit(0)
+	return
 }
