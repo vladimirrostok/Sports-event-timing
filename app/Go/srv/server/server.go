@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"io"
 	"net/http"
-	"sports/backend/srv/dashboard"
+	"sports/backend/srv/controllers/dashboard"
 )
 
 // HTTPClient interface to mock the network requests for test purposes.

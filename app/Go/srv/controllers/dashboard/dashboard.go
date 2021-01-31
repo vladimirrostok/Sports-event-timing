@@ -47,7 +47,6 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *Dashboard) Run() {
-	log.Print("started")
 	for {
 		select {
 		case conn := <-d.Join:

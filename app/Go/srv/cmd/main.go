@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"os/user"
 	"sports/backend/srv/cmd/config"
-	"sports/backend/srv/dashboard"
+	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/routes"
 	"sports/backend/srv/server"
 	"sports/backend/srv/utils"
