@@ -1,4 +1,3 @@
-//mockgen -destination=mocks/http_client.go -package=mocks go-ddd-cqrs-example/usersapi/context HTTPClient
 package server
 
 import (
@@ -17,9 +16,8 @@ type HTTPClient interface {
 
 // Server is a wrapper for the service context.
 type Server struct {
-	Dashboard  *dashboard_controller.Dashboard
-	DB         *gorm.DB
-	Router     *mux.Router
-	HTTPClient HTTPClient
-	Addr       string
+	Dashboard *dashboard_controller.Dashboard
+	DB        *gorm.DB
+	Router    *mux.Router
+	Addr      string
 }
