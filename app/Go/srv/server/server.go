@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"io"
 	"net/http"
+	"sports/backend/srv/dashboard"
 )
 
 // HTTPClient interface to mock the network requests for test purposes.
@@ -16,6 +17,7 @@ type HTTPClient interface {
 
 // Server is a wrapper for the service context.
 type Server struct {
+	Dashboard  *dashboard.Dashboard
 	DB         *gorm.DB
 	Router     *mux.Router
 	HTTPClient HTTPClient

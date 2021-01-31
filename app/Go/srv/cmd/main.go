@@ -2,14 +2,18 @@ package main
 
 import (
 	"crypto/tls"
+	"github.com/gorilla/mux"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"log"
 	"net/http"
-	"sports/backend/srv/api/dashboard"
-	"sports/backend/srv/api/server"
+	"os/user"
 	"sports/backend/srv/cmd/config"
+	"sports/backend/srv/dashboard"
+	"sports/backend/srv/routes"
+	"sports/backend/srv/server"
+	"sports/backend/srv/utils"
 )
 
 var cfg config.Config
@@ -63,6 +67,27 @@ func loadConfiguration() error {
 	return nil
 }
 
+// initialize the database connection and the HTTP router.
+func initializeAPI(server *server.Server, driver, username, password, port, host, database string) error {
+	var err error
+
+	server.DB, err = utils.GetDBConnection(driver, username, password, port, host, database)
+	if err != nil {
+		return err
+	}
+
+	// Database migration
+	server.DB.AutoMigrate(
+		&user.User{},
+	)
+
+	server.Router = mux.NewRouter()
+	routes.InitializeRoutes(server)
+	server.HTTPClient = &http.Client{}
+
+	return nil
+}
+
 func main() {
 	// Global logging synchronizer.
 	// This ensures the logged data is flushed out of the buffer before program exits.
@@ -78,33 +103,49 @@ func main() {
 		zap.S().Fatal(err)
 	}
 
-	srv := server.Server{}
-	srv.Addr = cfg.APIAddress
-
-	run(&srv)
-}
-
-func run(srv *server.Server) error {
-	c := &dashboard.Dashboard{
+	// Set up the dashboard Websocket API module
+	dashboard := &dashboard.Dashboard{
 		ConnHub: make(map[string]*dashboard.Connection),
 		Results: make(chan *dashboard.Result),
 		Join:    make(chan *dashboard.Connection),
 		Leave:   make(chan *dashboard.Connection),
 	}
 
+	srv := server.Server{}
+	srv.Addr = cfg.APIAddress
+	srv.Dashboard = dashboard
+
+	err = initializeAPI(
+		&srv,
+		cfg.DBDriver,
+		cfg.DBUsername,
+		cfg.DBPassword,
+		cfg.DBPort,
+		cfg.DBHost,
+		cfg.DBName,
+	)
+	if err != nil {
+		zap.S().Fatal(err)
+	}
+
 	// Disable cert verification to use self-signed certificates for internal service needs.
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
-	http.HandleFunc("/dashboard", c.Handler)
+	err = run(&srv)
+	if err != nil {
+		zap.S().Fatal(err)
+	}
+}
 
-	go c.Run()
+func run(srv *server.Server) error {
+	go srv.Dashboard.Run()
 
 	log.Printf("Server listening on %s", srv.Addr)
 
 	zap.S().Fatal(http.ListenAndServeTLS(srv.Addr,
 		"./srv/rsa.crt",
 		"./srv/rsa.key",
-		nil))
+		srv.Router))
 
 	return nil
 }

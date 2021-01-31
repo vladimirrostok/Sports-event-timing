@@ -24,7 +24,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-func (d *Dashboard) Handler(w http.ResponseWriter, r *http.Request) {
+func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	upgradedConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Fatalln("Error on websocket connection:", err.Error())
@@ -47,6 +47,7 @@ func (d *Dashboard) Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (d *Dashboard) Run() {
+	log.Print("started")
 	for {
 		select {
 		case conn := <-d.Join:

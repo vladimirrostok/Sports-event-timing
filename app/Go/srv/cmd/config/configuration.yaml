@@ -1,9 +1,9 @@
 ---
-db_host: live-postgres
+db_host: localhost
 db_driver: postgres
 db_username: postgres
-db_password: password
-db_name: users_db
+db_password: root
+db_name: sport_events
 db_port: 5432
 
 api_address: :8000
