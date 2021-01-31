@@ -8,6 +8,8 @@ import (
 	"go.uber.org/zap"
 	"net/http"
 	"sports/backend/domain/models/result"
+	"sports/backend/domain/models/sportsmen"
+	"strconv"
 )
 
 type Dashboard struct {
@@ -65,10 +67,16 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 	// Load results from DB on app startup.
 	var resultsMessages []ResultMessage
 	for _, result := range *lastResults {
+		version := uint32(1)
+		sportsmenFetched, err := sportsmen.GetSportsmen(*db, result.SportsmenID, &version)
+		if err != nil {
+			return err
+		}
+
 		msg := ResultMessage{
 			ID:                   result.ID.String(),
-			SportsmenStartNumber: result.SportsmenID.String(),
-			SportsmenName:        result.SportsmenID.String(),
+			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
+			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
 			TimeStart:            result.TimeStart.String(),
 		}
 		resultsMessages = append(resultsMessages, msg)

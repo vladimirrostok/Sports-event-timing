@@ -6,8 +6,8 @@ const Results = ({ results }) => {
     <div style={{ maxWidth: "100%" }}>
       <MaterialTable
         columns={[
-          { title: "Start number", field: "sportsmen_id" },
-          { title: "Name", field: "sportsmen_name" },
+          { title: "Start number", field: "start_number" },
+          { title: "Name", field: "name" },
           { title: "Time", field: "time_finish" },
         ]}
         data={results}

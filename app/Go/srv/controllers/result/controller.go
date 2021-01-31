@@ -14,6 +14,7 @@ import (
 	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/responses"
 	"sports/backend/srv/server"
+	"strconv"
 	"time"
 )
 
@@ -74,7 +75,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 		server.Dashboard.Results <- dashboard_controller.ResultMessage{
 			ID:                   newResult.ID.String(),
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
-			SportsmenStartNumber: string(sportsmenFetched.StartNumber),
+			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
 			TimeStart:            newResult.TimeStart.String(),
 		}
 
