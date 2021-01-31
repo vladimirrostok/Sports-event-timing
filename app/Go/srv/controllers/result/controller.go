@@ -65,11 +65,24 @@ func AddResult(server *server.Server) http.HandlerFunc {
 
 		server.Dashboard.Results <- &dashboard.Result{
 			ID:                   newResult.ID.String(),
-			SportsmenName:        "someName",
-			SportsmenStartNumber: "someNumber",
+			SportsmenName:        newResult.ID.String(),
+			SportsmenStartNumber: newResult.ID.String(),
 			Time:                 newResult.Time.String(),
 		}
 
 		responses.JSON(w, http.StatusOK, nil)
+	}
+}
+
+// GetLastTenResults handles the latest results request.
+func GetLastTenResults(server *server.Server) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		results, err := result.GetLastTenResults(*server.DB)
+		if err != nil {
+			responses.ERROR(w, http.StatusInternalServerError, nil)
+			return
+		}
+
+		responses.JSON(w, http.StatusOK, results)
 	}
 }

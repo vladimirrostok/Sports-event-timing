@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/jinzhu/gorm"
+	"go.uber.org/zap"
 	domain_errors "sports/backend/domain/errors"
 )
 
@@ -20,13 +21,20 @@ func GetResult(db gorm.DB, pk uuid.UUID, version *uint32) (*Result, error) {
 		return nil, fmt.Errorf("Error loading result: %w", err)
 	}
 
-	return &Result{
-		ID:           result.ID,
-		CheckpointID: result.CheckpointID,
-		SportsmenID:  result.SportsmenID,
-		EventStateID: result.EventStateID,
-		Time:         result.Time,
-		CreatedAt:    result.CreatedAt,
-		Version:      result.Version,
-	}, nil
+	return &result, nil
+}
+
+func GetLastTenResults(db gorm.DB) (*[]Result, error) {
+	var results []Result
+
+	err := db.Limit(10).Find(&results).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, fmt.Errorf("Results not found: %w", NotFound{})
+	} else if err != nil {
+		zap.S().Info(err)
+		return nil, fmt.Errorf("Error loading results: %w", err)
+	}
+
+	return &results, nil
+
 }
