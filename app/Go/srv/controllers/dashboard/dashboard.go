@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gofrs/uuid"
 	"github.com/gorilla/websocket"
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 )
 
@@ -19,7 +19,7 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  512,
 	WriteBufferSize: 512,
 	CheckOrigin: func(r *http.Request) bool {
-		log.Printf("%s %s%s %v", r.Method, r.Host, r.RequestURI, r.Proto)
+		zap.S().Infof("%s %s%s %v", r.Method, r.Host, r.RequestURI, r.Proto)
 		return r.Method == http.MethodGet
 	},
 }
@@ -27,12 +27,13 @@ var upgrader = websocket.Upgrader{
 func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	upgradedConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatalln("Error on websocket connection:", err.Error())
+		zap.S().Info("Error on websocket connection:", err.Error())
+		return
 	}
 
 	uuid, err := uuid.NewV4()
 	if err != nil {
-		log.Fatalln(err)
+		zap.S().Fatal(err)
 	}
 
 	conn := &Connection{
@@ -62,7 +63,7 @@ func (d *Dashboard) Run() {
 func (d *Dashboard) add(conn *Connection) {
 	if _, usr := d.ConnHub[conn.Name]; !usr {
 		d.ConnHub[conn.Name] = conn
-		log.Printf("%s joined the chat", conn.Name)
+		zap.S().Info("%s joined the chat", conn.Name)
 	}
 }
 
@@ -74,7 +75,7 @@ func (d *Dashboard) disconnect(conn *Connection) {
 }
 
 func (d *Dashboard) broadcast(result *Result) {
-	log.Printf("Broadcast result: %s, %s, %s",
+	zap.S().Infof("Broadcast result: %s, %s, %s",
 		result.SportsmenStartNumber,
 		result.SportsmenName,
 		result.Time)

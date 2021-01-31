@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"sports/backend/domain/models/result"
+	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/responses"
 	"sports/backend/srv/server"
 	"time"
@@ -60,6 +61,13 @@ func AddResult(server *server.Server) http.HandlerFunc {
 		if err != nil {
 			responses.ERROR(w, http.StatusInternalServerError, nil)
 			return
+		}
+
+		server.Dashboard.Results <- &dashboard.Result{
+			ID:                   newResult.ID.String(),
+			SportsmenName:        "someName",
+			SportsmenStartNumber: "someNumber",
+			Time:                 newResult.Time.String(),
 		}
 
 		responses.JSON(w, http.StatusOK, nil)

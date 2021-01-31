@@ -16,7 +16,7 @@ func GetDBConnection(driver, username, password, port, host, database string) (*
 		zap.S().Fatal("Cannot connect to %s database ", driver)
 		zap.S().Fatal("Error: ", err)
 	} else {
-		fmt.Printf("Connected to the %s database ", driver)
+		zap.S().Infof("Connected to the %s database ", driver)
 	}
 
 	return DB, nil

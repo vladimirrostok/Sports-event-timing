@@ -6,7 +6,6 @@ import (
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"log"
 	"net/http"
 	"sports/backend/domain/models/checkpoint"
 	"sports/backend/domain/models/eventstate"
@@ -146,7 +145,7 @@ func main() {
 func run(srv *server.Server) error {
 	go srv.Dashboard.Run()
 
-	log.Printf("Server listening on %s", srv.Addr)
+	zap.S().Infof("Server listening on %s", srv.Addr)
 
 	zap.S().Fatal(http.ListenAndServeTLS(srv.Addr,
 		"./srv/rsa.crt",

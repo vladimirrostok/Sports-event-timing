@@ -2,9 +2,8 @@ package dashboard
 
 import (
 	"encoding/json"
-	"log"
-
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 )
 
 type Connection struct {
@@ -17,7 +16,7 @@ func (c *Connection) Read() {
 	// Keep connection alive, wait for any request.
 	for {
 		if _, _, err := c.Conn.ReadMessage(); err != nil {
-			log.Println("Error on read message:", err.Error())
+			zap.S().Info("Error on read message:", err.Error())
 			break
 		} else {
 			c.Global.Results <- NewResult(
@@ -35,10 +34,10 @@ func (c *Connection) Read() {
 func (c *Connection) Write(message *Result) {
 	b, err := json.Marshal(message)
 	if err != nil {
-		log.Fatalln(err)
+		zap.S().Fatal(err)
 	}
 
 	if err := c.Conn.WriteMessage(websocket.TextMessage, b); err != nil {
-		log.Println("Error on write message:", err.Error())
+		zap.S().Info("Error on write message:", err.Error())
 	}
 }
