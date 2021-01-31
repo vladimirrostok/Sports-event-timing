@@ -8,7 +8,10 @@ import (
 	"go.uber.org/zap/zapcore"
 	"log"
 	"net/http"
-	"os/user"
+	"sports/backend/domain/models/checkpoint"
+	"sports/backend/domain/models/eventstate"
+	"sports/backend/domain/models/result"
+	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/cmd/config"
 	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/routes"
@@ -78,7 +81,10 @@ func initializeAPI(server *server.Server, driver, username, password, port, host
 
 	// Database migration
 	server.DB.AutoMigrate(
-		&user.User{},
+		&result.Result{},
+		&checkpoint.Checkpoint{},
+		&sportsmen.Sportsmen{},
+		&eventstate.EventState{},
 	)
 
 	server.Router = mux.NewRouter()

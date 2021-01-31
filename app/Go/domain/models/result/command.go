@@ -14,7 +14,6 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreated, error) {
 		validation.Field(&pendingResult.CheckpointID, validation.Required, is.UUIDv4),
 		validation.Field(&pendingResult.SportsmenID, validation.Required, is.UUIDv4),
 		validation.Field(&pendingResult.EventStateID, validation.Required, is.UUIDv4),
-		validation.Field(&pendingResult.Time, validation.Required),
 	); err != nil {
 		return nil, err
 	}
