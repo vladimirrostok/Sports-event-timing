@@ -7,7 +7,7 @@ import (
 )
 
 // Create a new sportsmen.
-func Create(db gorm.DB, pendingSportsmen PendingSportsmen) (*SportsmenCreated, error) {
+func Create(db gorm.DB, pendingSportsmen PendingSportsmen) (*SportsmenCreatedEvent, error) {
 	if err := validation.ValidateStruct(
 		&pendingSportsmen,
 		validation.Field(&pendingSportsmen.ID, validation.Required, is.UUIDv4),
@@ -36,7 +36,7 @@ func Create(db gorm.DB, pendingSportsmen PendingSportsmen) (*SportsmenCreated, e
 		return nil, err
 	}
 
-	return &SportsmenCreated{
+	return &SportsmenCreatedEvent{
 		SportsmenID: newSportsmen.ID.String(),
 		StartNumber: newSportsmen.StartNumber,
 		FirstName:   newSportsmen.FirstName,

@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package result;
 
-message ResultCreated {
+message ResultCreatedEvent {
   string ResultID = 1;
   string CheckpointID = 2;
   string SportsmenID = 3;
@@ -12,3 +12,8 @@ message ResultCreated {
   uint32 Version = 255;
 }
 
+message ResultFinishedEvent {
+  string ResultID = 1;
+  string TimeFinish = 2;
+  uint32 Version = 255;
+}

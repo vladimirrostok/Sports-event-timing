@@ -25,7 +25,29 @@ func (c *Connection) Read() {
 	c.Global.Leave <- c
 }
 
-func (c *Connection) Write(message *ResultMessage) {
+func (c *Connection) WriteResult(message *ResultMessage) {
+	b, err := json.Marshal(message)
+	if err != nil {
+		zap.S().Fatal(err)
+	}
+
+	if err := c.Conn.WriteMessage(websocket.TextMessage, b); err != nil {
+		zap.S().Info("Error on write message:", err.Error())
+	}
+}
+
+func (c *Connection) WriteUnfinishedResult(message *UnfinishedResultMessage) {
+	b, err := json.Marshal(message)
+	if err != nil {
+		zap.S().Fatal(err)
+	}
+
+	if err := c.Conn.WriteMessage(websocket.TextMessage, b); err != nil {
+		zap.S().Info("Error on write message:", err.Error())
+	}
+}
+
+func (c *Connection) WriteFinishedResult(message *FinishedResultMessage) {
 	b, err := json.Marshal(message)
 	if err != nil {
 		zap.S().Fatal(err)

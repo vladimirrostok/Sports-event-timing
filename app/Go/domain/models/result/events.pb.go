@@ -22,7 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type ResultCreated struct {
+type ResultCreatedEvent struct {
 	ResultID             string   `protobuf:"bytes,1,opt,name=ResultID,proto3" json:"ResultID,omitempty"`
 	CheckpointID         string   `protobuf:"bytes,2,opt,name=CheckpointID,proto3" json:"CheckpointID,omitempty"`
 	SportsmenID          string   `protobuf:"bytes,3,opt,name=SportsmenID,proto3" json:"SportsmenID,omitempty"`
@@ -34,18 +34,18 @@ type ResultCreated struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *ResultCreated) Reset()         { *m = ResultCreated{} }
-func (m *ResultCreated) String() string { return proto.CompactTextString(m) }
-func (*ResultCreated) ProtoMessage()    {}
-func (*ResultCreated) Descriptor() ([]byte, []int) {
+func (m *ResultCreatedEvent) Reset()         { *m = ResultCreatedEvent{} }
+func (m *ResultCreatedEvent) String() string { return proto.CompactTextString(m) }
+func (*ResultCreatedEvent) ProtoMessage()    {}
+func (*ResultCreatedEvent) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8f22242cb04491f9, []int{0}
 }
-func (m *ResultCreated) XXX_Unmarshal(b []byte) error {
+func (m *ResultCreatedEvent) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ResultCreated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *ResultCreatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ResultCreated.Marshal(b, m, deterministic)
+		return xxx_messageInfo_ResultCreatedEvent.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -55,54 +55,117 @@ func (m *ResultCreated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *ResultCreated) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ResultCreated.Merge(m, src)
+func (m *ResultCreatedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResultCreatedEvent.Merge(m, src)
 }
-func (m *ResultCreated) XXX_Size() int {
+func (m *ResultCreatedEvent) XXX_Size() int {
 	return m.Size()
 }
-func (m *ResultCreated) XXX_DiscardUnknown() {
-	xxx_messageInfo_ResultCreated.DiscardUnknown(m)
+func (m *ResultCreatedEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResultCreatedEvent.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ResultCreated proto.InternalMessageInfo
+var xxx_messageInfo_ResultCreatedEvent proto.InternalMessageInfo
 
-func (m *ResultCreated) GetResultID() string {
+func (m *ResultCreatedEvent) GetResultID() string {
 	if m != nil {
 		return m.ResultID
 	}
 	return ""
 }
 
-func (m *ResultCreated) GetCheckpointID() string {
+func (m *ResultCreatedEvent) GetCheckpointID() string {
 	if m != nil {
 		return m.CheckpointID
 	}
 	return ""
 }
 
-func (m *ResultCreated) GetSportsmenID() string {
+func (m *ResultCreatedEvent) GetSportsmenID() string {
 	if m != nil {
 		return m.SportsmenID
 	}
 	return ""
 }
 
-func (m *ResultCreated) GetTimeStart() string {
+func (m *ResultCreatedEvent) GetTimeStart() string {
 	if m != nil {
 		return m.TimeStart
 	}
 	return ""
 }
 
-func (m *ResultCreated) GetTimeFinish() string {
+func (m *ResultCreatedEvent) GetTimeFinish() string {
 	if m != nil {
 		return m.TimeFinish
 	}
 	return ""
 }
 
-func (m *ResultCreated) GetVersion() uint32 {
+func (m *ResultCreatedEvent) GetVersion() uint32 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
+type ResultFinishedEvent struct {
+	ResultID             string   `protobuf:"bytes,1,opt,name=ResultID,proto3" json:"ResultID,omitempty"`
+	TimeFinish           string   `protobuf:"bytes,2,opt,name=TimeFinish,proto3" json:"TimeFinish,omitempty"`
+	Version              uint32   `protobuf:"varint,255,opt,name=Version,proto3" json:"Version,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ResultFinishedEvent) Reset()         { *m = ResultFinishedEvent{} }
+func (m *ResultFinishedEvent) String() string { return proto.CompactTextString(m) }
+func (*ResultFinishedEvent) ProtoMessage()    {}
+func (*ResultFinishedEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8f22242cb04491f9, []int{1}
+}
+func (m *ResultFinishedEvent) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ResultFinishedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ResultFinishedEvent.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ResultFinishedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResultFinishedEvent.Merge(m, src)
+}
+func (m *ResultFinishedEvent) XXX_Size() int {
+	return m.Size()
+}
+func (m *ResultFinishedEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResultFinishedEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResultFinishedEvent proto.InternalMessageInfo
+
+func (m *ResultFinishedEvent) GetResultID() string {
+	if m != nil {
+		return m.ResultID
+	}
+	return ""
+}
+
+func (m *ResultFinishedEvent) GetTimeFinish() string {
+	if m != nil {
+		return m.TimeFinish
+	}
+	return ""
+}
+
+func (m *ResultFinishedEvent) GetVersion() uint32 {
 	if m != nil {
 		return m.Version
 	}
@@ -110,29 +173,31 @@ func (m *ResultCreated) GetVersion() uint32 {
 }
 
 func init() {
-	proto.RegisterType((*ResultCreated)(nil), "result.ResultCreated")
+	proto.RegisterType((*ResultCreatedEvent)(nil), "result.ResultCreatedEvent")
+	proto.RegisterType((*ResultFinishedEvent)(nil), "result.ResultFinishedEvent")
 }
 
 func init() { proto.RegisterFile("events.proto", fileDescriptor_8f22242cb04491f9) }
 
 var fileDescriptor_8f22242cb04491f9 = []byte{
-	// 198 bytes of a gzipped FileDescriptorProto
+	// 218 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0x2d, 0x4b, 0xcd,
 	0x2b, 0x29, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x2b, 0x4a, 0x2d, 0x2e, 0xcd, 0x29,
-	0x51, 0x3a, 0xc5, 0xc8, 0xc5, 0x1b, 0x04, 0x66, 0x3a, 0x17, 0xa5, 0x26, 0x96, 0xa4, 0xa6, 0x08,
-	0x49, 0x71, 0x71, 0x40, 0x04, 0x3c, 0x5d, 0x24, 0x18, 0x15, 0x18, 0x35, 0x38, 0x83, 0xe0, 0x7c,
-	0x21, 0x25, 0x2e, 0x1e, 0xe7, 0x8c, 0xd4, 0xe4, 0xec, 0x82, 0xfc, 0xcc, 0x3c, 0x90, 0x3c, 0x13,
-	0x58, 0x1e, 0x45, 0x4c, 0x48, 0x81, 0x8b, 0x3b, 0xb8, 0x20, 0xbf, 0xa8, 0xa4, 0x38, 0x37, 0x35,
-	0xcf, 0xd3, 0x45, 0x82, 0x19, 0xac, 0x04, 0x59, 0x48, 0x48, 0x86, 0x8b, 0x33, 0x24, 0x33, 0x37,
-	0x35, 0xb8, 0x24, 0xb1, 0xa8, 0x44, 0x82, 0x05, 0x2c, 0x8f, 0x10, 0x10, 0x92, 0xe3, 0xe2, 0x02,
-	0x71, 0xdc, 0x32, 0xf3, 0x32, 0x8b, 0x33, 0x24, 0x58, 0xc1, 0xd2, 0x48, 0x22, 0x42, 0x92, 0x5c,
-	0xec, 0x61, 0xa9, 0x45, 0xc5, 0x99, 0xf9, 0x79, 0x12, 0xff, 0x41, 0xee, 0xe3, 0x0d, 0x82, 0xf1,
-	0x9d, 0x04, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x19,
-	0x8f, 0xe5, 0x18, 0x92, 0xd8, 0xc0, 0xbe, 0x35, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x37, 0x94,
-	0xab, 0xaa, 0xfd, 0x00, 0x00, 0x00,
+	0x51, 0x3a, 0xcf, 0xc8, 0x25, 0x14, 0x04, 0x66, 0x3a, 0x17, 0xa5, 0x26, 0x96, 0xa4, 0xa6, 0xb8,
+	0x82, 0x54, 0x09, 0x49, 0x71, 0x71, 0x40, 0x44, 0x3d, 0x5d, 0x24, 0x18, 0x15, 0x18, 0x35, 0x38,
+	0x83, 0xe0, 0x7c, 0x21, 0x25, 0x2e, 0x1e, 0xe7, 0x8c, 0xd4, 0xe4, 0xec, 0x82, 0xfc, 0xcc, 0x3c,
+	0x90, 0x3c, 0x13, 0x58, 0x1e, 0x45, 0x4c, 0x48, 0x81, 0x8b, 0x3b, 0xb8, 0x20, 0xbf, 0xa8, 0xa4,
+	0x38, 0x37, 0x35, 0xcf, 0xd3, 0x45, 0x82, 0x19, 0xac, 0x04, 0x59, 0x48, 0x48, 0x86, 0x8b, 0x33,
+	0x24, 0x33, 0x37, 0x35, 0xb8, 0x24, 0xb1, 0xa8, 0x44, 0x82, 0x05, 0x2c, 0x8f, 0x10, 0x10, 0x92,
+	0xe3, 0xe2, 0x02, 0x71, 0xdc, 0x32, 0xf3, 0x32, 0x8b, 0x33, 0x24, 0x58, 0xc1, 0xd2, 0x48, 0x22,
+	0x42, 0x92, 0x5c, 0xec, 0x61, 0xa9, 0x45, 0xc5, 0x99, 0xf9, 0x79, 0x12, 0xff, 0x41, 0xee, 0xe3,
+	0x0d, 0x82, 0xf1, 0x95, 0x72, 0xb8, 0x84, 0x21, 0x4e, 0x85, 0x28, 0x25, 0xc6, 0x47, 0xa8, 0xb6,
+	0x31, 0x91, 0x60, 0x9b, 0x93, 0xc0, 0x89, 0x47, 0x72, 0x8c, 0x17, 0x1e, 0xc9, 0x31, 0x3e, 0x78,
+	0x24, 0xc7, 0x38, 0xe3, 0xb1, 0x1c, 0x43, 0x12, 0x1b, 0x38, 0x80, 0x8d, 0x01, 0x01, 0x00, 0x00,
+	0xff, 0xff, 0xac, 0x23, 0x9e, 0x31, 0x70, 0x01, 0x00, 0x00,
 }
 
-func (m *ResultCreated) Marshal() (dAtA []byte, err error) {
+func (m *ResultCreatedEvent) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -142,12 +207,12 @@ func (m *ResultCreated) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ResultCreated) MarshalTo(dAtA []byte) (int, error) {
+func (m *ResultCreatedEvent) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ResultCreated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ResultCreatedEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -201,6 +266,54 @@ func (m *ResultCreated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ResultFinishedEvent) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ResultFinishedEvent) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ResultFinishedEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.XXX_unrecognized != nil {
+		i -= len(m.XXX_unrecognized)
+		copy(dAtA[i:], m.XXX_unrecognized)
+	}
+	if m.Version != 0 {
+		i = encodeVarintEvents(dAtA, i, uint64(m.Version))
+		i--
+		dAtA[i] = 0xf
+		i--
+		dAtA[i] = 0xf8
+	}
+	if len(m.TimeFinish) > 0 {
+		i -= len(m.TimeFinish)
+		copy(dAtA[i:], m.TimeFinish)
+		i = encodeVarintEvents(dAtA, i, uint64(len(m.TimeFinish)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ResultID) > 0 {
+		i -= len(m.ResultID)
+		copy(dAtA[i:], m.ResultID)
+		i = encodeVarintEvents(dAtA, i, uint64(len(m.ResultID)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintEvents(dAtA []byte, offset int, v uint64) int {
 	offset -= sovEvents(v)
 	base := offset
@@ -212,7 +325,7 @@ func encodeVarintEvents(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *ResultCreated) Size() (n int) {
+func (m *ResultCreatedEvent) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -247,13 +360,36 @@ func (m *ResultCreated) Size() (n int) {
 	return n
 }
 
+func (m *ResultFinishedEvent) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ResultID)
+	if l > 0 {
+		n += 1 + l + sovEvents(uint64(l))
+	}
+	l = len(m.TimeFinish)
+	if l > 0 {
+		n += 1 + l + sovEvents(uint64(l))
+	}
+	if m.Version != 0 {
+		n += 2 + sovEvents(uint64(m.Version))
+	}
+	if m.XXX_unrecognized != nil {
+		n += len(m.XXX_unrecognized)
+	}
+	return n
+}
+
 func sovEvents(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozEvents(x uint64) (n int) {
 	return sovEvents(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *ResultCreated) Unmarshal(dAtA []byte) error {
+func (m *ResultCreatedEvent) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -276,10 +412,10 @@ func (m *ResultCreated) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ResultCreated: wiretype end group for non-group")
+			return fmt.Errorf("proto: ResultCreatedEvent: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ResultCreated: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: ResultCreatedEvent: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -411,6 +547,140 @@ func (m *ResultCreated) Unmarshal(dAtA []byte) error {
 			m.TimeStart = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TimeFinish", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvents
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvents
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvents
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TimeFinish = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 255:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+			}
+			m.Version = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvents
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Version |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEvents(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEvents
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.XXX_unrecognized = append(m.XXX_unrecognized, dAtA[iNdEx:iNdEx+skippy]...)
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ResultFinishedEvent) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEvents
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ResultFinishedEvent: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ResultFinishedEvent: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResultID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvents
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvents
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvents
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResultID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TimeFinish", wireType)
 			}

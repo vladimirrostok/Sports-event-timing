@@ -72,11 +72,73 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			zap.S().Fatal(err)
 		}
 
-		server.Dashboard.Results <- dashboard_controller.ResultMessage{
+		server.Dashboard.Results <- dashboard_controller.UnfinishedResultMessage{
 			ID:                   newResult.ID.String(),
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
 			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
 			TimeStart:            newResult.TimeStart.String(),
+		}
+
+		responses.JSON(w, http.StatusOK, nil)
+	}
+}
+
+// AddFinishTime handles the finish result request.
+func AddFinishTime(server *server.Server) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		req := FinishRequest{}
+		err = json.Unmarshal(body, &req)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		err = validation.ValidateStruct(&req,
+			validation.Field(&req.CheckpointID, validation.Required, is.UUIDv4),
+			validation.Field(&req.SportsmenID, validation.Required, is.UUIDv4),
+			validation.Field(&req.Time, validation.Required),
+		)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		time, err := time.Parse(time.RFC3339, req.Time)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		version := uint32(1)
+		resultUnfinished, err := result.GetUnfinishedResult(*server.DB, req.CheckpointID, req.SportsmenID, &version)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		_, err = result.AddFinishTime(*server.DB, req.Time, *resultUnfinished)
+		if err != nil {
+			responses.ERROR(w, http.StatusInternalServerError, err)
+			return
+		}
+
+		version = uint32(1)
+		sportsmenFetched, err := sportsmen.GetSportsmen(*server.DB, resultUnfinished.SportsmenID, &version)
+		if err != nil {
+			zap.S().Fatal(err)
+		}
+
+		server.Dashboard.Finish <- dashboard_controller.FinishedResultMessage{
+			ID:                   resultUnfinished.ID.String(),
+			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
+			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
+			TimeFinish:           time.String(),
 		}
 
 		responses.JSON(w, http.StatusOK, nil)

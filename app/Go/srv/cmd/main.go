@@ -115,7 +115,8 @@ func main() {
 	// Set up the dashboard Websocket API module
 	dashboard := &dashboard_controller.Dashboard{
 		ConnHub: make(map[string]*dashboard_controller.Connection),
-		Results: make(chan dashboard_controller.ResultMessage),
+		Results: make(chan dashboard_controller.UnfinishedResultMessage),
+		Finish:  make(chan dashboard_controller.FinishedResultMessage),
 		Join:    make(chan *dashboard_controller.Connection),
 		Leave:   make(chan *dashboard_controller.Connection),
 	}

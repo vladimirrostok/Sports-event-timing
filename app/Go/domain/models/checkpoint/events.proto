@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package checkpoint;
 
-message CheckpointCreated {
+message CheckpointCreatedEvent {
   string CheckpointID = 1;
   string Name = 2;
   uint32 Version = 255;

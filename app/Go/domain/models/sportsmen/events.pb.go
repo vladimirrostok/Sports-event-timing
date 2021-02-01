@@ -22,7 +22,7 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type SportsmenCreated struct {
+type SportsmenCreatedEvent struct {
 	SportsmenID          string   `protobuf:"bytes,1,opt,name=SportsmenID,proto3" json:"SportsmenID,omitempty"`
 	StartNumber          uint32   `protobuf:"varint,2,opt,name=StartNumber,proto3" json:"StartNumber,omitempty"`
 	FirstName            string   `protobuf:"bytes,3,opt,name=FirstName,proto3" json:"FirstName,omitempty"`
@@ -33,18 +33,18 @@ type SportsmenCreated struct {
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SportsmenCreated) Reset()         { *m = SportsmenCreated{} }
-func (m *SportsmenCreated) String() string { return proto.CompactTextString(m) }
-func (*SportsmenCreated) ProtoMessage()    {}
-func (*SportsmenCreated) Descriptor() ([]byte, []int) {
+func (m *SportsmenCreatedEvent) Reset()         { *m = SportsmenCreatedEvent{} }
+func (m *SportsmenCreatedEvent) String() string { return proto.CompactTextString(m) }
+func (*SportsmenCreatedEvent) ProtoMessage()    {}
+func (*SportsmenCreatedEvent) Descriptor() ([]byte, []int) {
 	return fileDescriptor_8f22242cb04491f9, []int{0}
 }
-func (m *SportsmenCreated) XXX_Unmarshal(b []byte) error {
+func (m *SportsmenCreatedEvent) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SportsmenCreated) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SportsmenCreatedEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_SportsmenCreated.Marshal(b, m, deterministic)
+		return xxx_messageInfo_SportsmenCreatedEvent.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -54,47 +54,47 @@ func (m *SportsmenCreated) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *SportsmenCreated) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SportsmenCreated.Merge(m, src)
+func (m *SportsmenCreatedEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SportsmenCreatedEvent.Merge(m, src)
 }
-func (m *SportsmenCreated) XXX_Size() int {
+func (m *SportsmenCreatedEvent) XXX_Size() int {
 	return m.Size()
 }
-func (m *SportsmenCreated) XXX_DiscardUnknown() {
-	xxx_messageInfo_SportsmenCreated.DiscardUnknown(m)
+func (m *SportsmenCreatedEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_SportsmenCreatedEvent.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SportsmenCreated proto.InternalMessageInfo
+var xxx_messageInfo_SportsmenCreatedEvent proto.InternalMessageInfo
 
-func (m *SportsmenCreated) GetSportsmenID() string {
+func (m *SportsmenCreatedEvent) GetSportsmenID() string {
 	if m != nil {
 		return m.SportsmenID
 	}
 	return ""
 }
 
-func (m *SportsmenCreated) GetStartNumber() uint32 {
+func (m *SportsmenCreatedEvent) GetStartNumber() uint32 {
 	if m != nil {
 		return m.StartNumber
 	}
 	return 0
 }
 
-func (m *SportsmenCreated) GetFirstName() string {
+func (m *SportsmenCreatedEvent) GetFirstName() string {
 	if m != nil {
 		return m.FirstName
 	}
 	return ""
 }
 
-func (m *SportsmenCreated) GetLastName() string {
+func (m *SportsmenCreatedEvent) GetLastName() string {
 	if m != nil {
 		return m.LastName
 	}
 	return ""
 }
 
-func (m *SportsmenCreated) GetVersion() uint32 {
+func (m *SportsmenCreatedEvent) GetVersion() uint32 {
 	if m != nil {
 		return m.Version
 	}
@@ -102,27 +102,28 @@ func (m *SportsmenCreated) GetVersion() uint32 {
 }
 
 func init() {
-	proto.RegisterType((*SportsmenCreated)(nil), "sportsmen.SportsmenCreated")
+	proto.RegisterType((*SportsmenCreatedEvent)(nil), "sportsmen.SportsmenCreatedEvent")
 }
 
 func init() { proto.RegisterFile("events.proto", fileDescriptor_8f22242cb04491f9) }
 
 var fileDescriptor_8f22242cb04491f9 = []byte{
-	// 176 bytes of a gzipped FileDescriptorProto
+	// 179 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0x2d, 0x4b, 0xcd,
 	0x2b, 0x29, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x2c, 0x2e, 0xc8, 0x2f, 0x2a, 0x29,
-	0xce, 0x4d, 0xcd, 0x53, 0x5a, 0xcd, 0xc8, 0x25, 0x10, 0x0c, 0xe3, 0x39, 0x17, 0xa5, 0x26, 0x96,
-	0xa4, 0xa6, 0x08, 0x29, 0x70, 0x71, 0xc3, 0xc5, 0x3c, 0x5d, 0x24, 0x18, 0x15, 0x18, 0x35, 0x38,
-	0x83, 0x90, 0x85, 0xc0, 0x2a, 0x4a, 0x12, 0x8b, 0x4a, 0xfc, 0x4a, 0x73, 0x93, 0x52, 0x8b, 0x24,
-	0x98, 0x14, 0x18, 0x35, 0x78, 0x83, 0x90, 0x85, 0x84, 0x64, 0xb8, 0x38, 0xdd, 0x32, 0x8b, 0x8a,
-	0x4b, 0xfc, 0x12, 0x73, 0x53, 0x25, 0x98, 0xc1, 0x26, 0x20, 0x04, 0x84, 0xa4, 0xb8, 0x38, 0x7c,
-	0x12, 0xa1, 0x92, 0x2c, 0x60, 0x49, 0x38, 0x5f, 0x48, 0x92, 0x8b, 0x3d, 0x2c, 0xb5, 0xa8, 0x38,
-	0x33, 0x3f, 0x4f, 0xe2, 0x3f, 0x23, 0xd8, 0x60, 0x18, 0xdf, 0x49, 0xe0, 0xc4, 0x23, 0x39, 0xc6,
-	0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf1, 0x58, 0x8e, 0x21, 0x89, 0x0d, 0xec,
-	0x23, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0x53, 0x4a, 0xfe, 0xfc, 0xe1, 0x00, 0x00, 0x00,
+	0xce, 0x4d, 0xcd, 0x53, 0xda, 0xc0, 0xc8, 0x25, 0x1a, 0x0c, 0xe3, 0x39, 0x17, 0xa5, 0x26, 0x96,
+	0xa4, 0xa6, 0xb8, 0x82, 0xd4, 0x0a, 0x29, 0x70, 0x71, 0xc3, 0x25, 0x3c, 0x5d, 0x24, 0x18, 0x15,
+	0x18, 0x35, 0x38, 0x83, 0x90, 0x85, 0xc0, 0x2a, 0x4a, 0x12, 0x8b, 0x4a, 0xfc, 0x4a, 0x73, 0x93,
+	0x52, 0x8b, 0x24, 0x98, 0x14, 0x18, 0x35, 0x78, 0x83, 0x90, 0x85, 0x84, 0x64, 0xb8, 0x38, 0xdd,
+	0x32, 0x8b, 0x8a, 0x4b, 0xfc, 0x12, 0x73, 0x53, 0x25, 0x98, 0xc1, 0x26, 0x20, 0x04, 0x84, 0xa4,
+	0xb8, 0x38, 0x7c, 0x12, 0xa1, 0x92, 0x2c, 0x60, 0x49, 0x38, 0x5f, 0x48, 0x92, 0x8b, 0x3d, 0x2c,
+	0xb5, 0xa8, 0x38, 0x33, 0x3f, 0x4f, 0xe2, 0x3f, 0x23, 0xd8, 0x60, 0x18, 0xdf, 0x49, 0xe0, 0xc4,
+	0x23, 0x39, 0xc6, 0x0b, 0x8f, 0xe4, 0x18, 0x1f, 0x3c, 0x92, 0x63, 0x9c, 0xf1, 0x58, 0x8e, 0x21,
+	0x89, 0x0d, 0xec, 0x2d, 0x63, 0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa2, 0xa6, 0x27, 0x8b, 0xe6,
+	0x00, 0x00, 0x00,
 }
 
-func (m *SportsmenCreated) Marshal() (dAtA []byte, err error) {
+func (m *SportsmenCreatedEvent) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -132,12 +133,12 @@ func (m *SportsmenCreated) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SportsmenCreated) MarshalTo(dAtA []byte) (int, error) {
+func (m *SportsmenCreatedEvent) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SportsmenCreated) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SportsmenCreatedEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -193,7 +194,7 @@ func encodeVarintEvents(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *SportsmenCreated) Size() (n int) {
+func (m *SportsmenCreatedEvent) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -229,7 +230,7 @@ func sovEvents(x uint64) (n int) {
 func sozEvents(x uint64) (n int) {
 	return sovEvents(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *SportsmenCreated) Unmarshal(dAtA []byte) error {
+func (m *SportsmenCreatedEvent) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -252,10 +253,10 @@ func (m *SportsmenCreated) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SportsmenCreated: wiretype end group for non-group")
+			return fmt.Errorf("proto: SportsmenCreatedEvent: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SportsmenCreated: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SportsmenCreatedEvent: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

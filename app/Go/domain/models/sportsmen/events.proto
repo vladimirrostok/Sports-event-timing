@@ -3,7 +3,7 @@ syntax = "proto3";
 
 package sportsmen;
 
-message SportsmenCreated {
+message SportsmenCreatedEvent {
   string SportsmenID = 1;
   uint32 StartNumber = 2;
   string FirstName = 3;

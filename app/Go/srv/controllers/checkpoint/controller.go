@@ -40,12 +40,12 @@ func AddCheckpoint(server *server.Server) http.HandlerFunc {
 			Name: req.Name,
 		}
 
-		checkpointCreated, err := checkpoint.Create(*server.DB, newCheckpoint)
+		checkpointCreatedEvent, err := checkpoint.Create(*server.DB, newCheckpoint)
 		if err != nil {
 			responses.ERROR(w, http.StatusInternalServerError, err)
 			return
 		}
 
-		responses.JSON(w, http.StatusOK, checkpointCreated.CheckpointID)
+		responses.JSON(w, http.StatusOK, checkpointCreatedEvent.CheckpointID)
 	}
 }

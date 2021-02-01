@@ -8,7 +8,7 @@ import (
 )
 
 // Create a new checkpoint.
-func Create(db gorm.DB, pendingCheckpoint PendingCheckpoint) (*CheckpointCreated, error) {
+func Create(db gorm.DB, pendingCheckpoint PendingCheckpoint) (*CheckpointCreatedEvent, error) {
 	pendingCheckpoint.Name = strings.TrimSpace(pendingCheckpoint.Name)
 	pendingCheckpoint.Name = strings.Title(pendingCheckpoint.Name)
 
@@ -34,7 +34,7 @@ func Create(db gorm.DB, pendingCheckpoint PendingCheckpoint) (*CheckpointCreated
 		return nil, err
 	}
 
-	return &CheckpointCreated{
+	return &CheckpointCreatedEvent{
 		CheckpointID: newCheckpoint.ID.String(),
 		Name:         newCheckpoint.Name,
 		Version:      newCheckpoint.Version,

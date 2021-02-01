@@ -13,6 +13,7 @@ func InitializeRoutes(s *server.Server) {
 
 	s.Router.HandleFunc("/results", middleware.SetMiddlewareJSON(result_controller.AddResult(s))).Methods("POST")
 	s.Router.HandleFunc("/results", middleware.SetMiddlewareJSON(result_controller.GetLastTenResults(s))).Methods("GET")
+	s.Router.HandleFunc("/finish", middleware.SetMiddlewareJSON(result_controller.AddFinishTime(s))).Methods("POST")
 
 	s.Router.HandleFunc("/checkpoints", middleware.SetMiddlewareJSON(checkpoint_controller.AddCheckpoint(s))).Methods("POST")
 

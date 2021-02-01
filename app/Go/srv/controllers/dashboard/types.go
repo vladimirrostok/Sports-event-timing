@@ -5,9 +5,19 @@ type ResultMessage struct {
 	SportsmenStartNumber string `json:"start_number"`
 	SportsmenName        string `json:"name"`
 	TimeStart            string `json:"time_start"`
+	TimeFinish           string `json:"time_finish"`
 }
 
-type FinishMessage struct {
-	ID        string `json:"id"`
-	TimeStart string `json:"time_finish"`
+type UnfinishedResultMessage struct {
+	ID                   string `json:"id"`
+	SportsmenStartNumber string `json:"start_number"`
+	SportsmenName        string `json:"name"`
+	TimeStart            string `json:"time_start"`
+}
+
+type FinishedResultMessage struct {
+	ID                   string `json:"id"`
+	SportsmenStartNumber string `json:"start_number"`
+	SportsmenName        string `json:"name"`
+	TimeFinish           string `json:"time_finish"`
 }

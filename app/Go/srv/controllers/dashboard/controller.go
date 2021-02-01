@@ -15,8 +15,8 @@ import (
 type Dashboard struct {
 	LastResults *[]ResultMessage
 	ConnHub     map[string]*Connection
-	Results     chan ResultMessage
-	Finish      chan FinishMessage
+	Results     chan UnfinishedResultMessage
+	Finish      chan FinishedResultMessage
 	Join        chan *Connection
 	Leave       chan *Connection
 }
@@ -49,7 +49,7 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, msg := range *d.LastResults {
-		conn.Write(&msg)
+		conn.WriteResult(&msg)
 	}
 
 	d.Join <- conn
@@ -73,11 +73,17 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 			return err
 		}
 
+		timeFinish := ""
+		if result.TimeFinish != nil {
+			timeFinish = result.TimeFinish.String()
+		}
+
 		msg := ResultMessage{
 			ID:                   result.ID.String(),
 			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
 			TimeStart:            result.TimeStart.String(),
+			TimeFinish:           timeFinish,
 		}
 		resultsMessages = append(resultsMessages, msg)
 	}
@@ -89,7 +95,9 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 		case conn := <-d.Join:
 			d.add(conn)
 		case result := <-d.Results:
-			d.broadcast(&result)
+			d.broadcastResult(&result)
+		case finish := <-d.Finish:
+			d.broadcastFinish(&finish)
 		case conn := <-d.Leave:
 			d.disconnect(conn)
 		}
@@ -110,9 +118,15 @@ func (d *Dashboard) disconnect(conn *Connection) {
 	}
 }
 
-func (d *Dashboard) broadcast(result *ResultMessage) {
+func (d *Dashboard) broadcastResult(result *UnfinishedResultMessage) {
 	// Update stored results to return latest data to recently joined customers.
-	updatedResults := append(*d.LastResults, *result)
+	resultMessage := ResultMessage{
+		ID:                   result.ID,
+		SportsmenStartNumber: result.SportsmenStartNumber,
+		SportsmenName:        result.SportsmenName,
+		TimeStart:            result.TimeStart,
+	}
+	updatedResults := append(*d.LastResults, resultMessage)
 	d.LastResults = &updatedResults
 
 	zap.S().Infof("Broadcast result: %s, %s, %s",
@@ -120,6 +134,16 @@ func (d *Dashboard) broadcast(result *ResultMessage) {
 		result.SportsmenName,
 		result.TimeStart)
 	for _, conn := range d.ConnHub {
-		conn.Write(result)
+		conn.WriteUnfinishedResult(result)
+	}
+}
+
+func (d *Dashboard) broadcastFinish(finish *FinishedResultMessage) {
+	zap.S().Infof("Broadcast result: %s, %s, %s",
+		finish.SportsmenStartNumber,
+		finish.SportsmenName,
+		finish.TimeFinish)
+	for _, conn := range d.ConnHub {
+		conn.WriteFinishedResult(finish)
 	}
 }
