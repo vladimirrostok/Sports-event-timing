@@ -91,6 +91,9 @@ func initializeAPI(server *server.Server, driver, username, password, port, host
 		&sportsmen.Sportsmen{},
 	)
 
+	server.DB.Model(&result.Result{}).AddForeignKey("checkpoint_id", "checkpoints(id)", "RESTRICT", "RESTRICT")
+	server.DB.Model(&result.Result{}).AddForeignKey("sportsmen_id", "sportsmens(id)", "RESTRICT", "RESTRICT")
+
 	server.Router = mux.NewRouter()
 	routes.InitializeRoutes(server)
 
