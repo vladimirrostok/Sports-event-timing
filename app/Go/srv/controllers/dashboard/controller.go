@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"sports/backend/domain/models/result"
 	"sports/backend/domain/models/sportsmen"
-	"strconv"
 )
 
 type Dashboard struct {
@@ -73,16 +72,16 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 			return err
 		}
 
-		timeFinish := ""
+		timeFinish := int64(0)
 		if result.TimeFinish != nil {
-			timeFinish = result.TimeFinish.String()
+			timeFinish = *result.TimeFinish
 		}
 
 		msg := ResultMessage{
 			ID:                   result.ID.String(),
-			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
+			SportsmenStartNumber: sportsmenFetched.StartNumber,
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
-			TimeStart:            result.TimeStart.String(),
+			TimeStart:            result.TimeStart,
 			TimeFinish:           timeFinish,
 		}
 		resultsMessages = append(resultsMessages, msg)

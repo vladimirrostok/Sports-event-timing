@@ -15,7 +15,7 @@ func GetUnfinishedResult(db gorm.DB, checkpoint_id, sportsmen_id string, version
 	if gorm.IsRecordNotFoundError(err) {
 		return nil, fmt.Errorf("Result not found: %w", NotFound{})
 	} else if version != nil && result.Version != *version {
-		return nil, fmt.Errorf("Invalid version tag: %w", domain_errors.InvalidVersion{})
+		return nil, fmt.Errorf("Result has been already updated with finish time: %w", domain_errors.InvalidVersion{})
 	} else if err != nil {
 		return nil, fmt.Errorf("Error loading result: %w", err)
 	}

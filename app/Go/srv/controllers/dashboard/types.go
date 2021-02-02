@@ -2,22 +2,22 @@ package dashboard_controller
 
 type ResultMessage struct {
 	ID                   string `json:"id"`
-	SportsmenStartNumber string `json:"start_number"`
+	SportsmenStartNumber uint32 `json:"start_number"`
 	SportsmenName        string `json:"name"`
-	TimeStart            string `json:"time_start"`
-	TimeFinish           string `json:"time_finish"`
+	TimeStart            int64  `json:"time_start"`
+	TimeFinish           int64  `json:"time_finish"`
 }
 
 type UnfinishedResultMessage struct {
 	ID                   string `json:"id"`
-	SportsmenStartNumber string `json:"start_number"`
+	SportsmenStartNumber uint32 `json:"start_number"`
 	SportsmenName        string `json:"name"`
-	TimeStart            string `json:"time_start"`
+	TimeStart            int64  `json:"time_start"`
 }
 
 type FinishedResultMessage struct {
 	ID                   string `json:"id"`
-	SportsmenStartNumber string `json:"start_number"`
+	SportsmenStartNumber uint32 `json:"start_number"`
 	SportsmenName        string `json:"name"`
-	TimeFinish           string `json:"time_finish"`
+	TimeFinish           int64  `json:"time_finish"`
 }

@@ -14,8 +14,6 @@ import (
 	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/responses"
 	"sports/backend/srv/server"
-	"strconv"
-	"time"
 )
 
 // AddResult handles the new result request.
@@ -48,16 +46,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 			ID:           uuid.Must(uuid.NewV4()),
 			CheckpointID: uuid.Must(uuid.FromString(req.CheckpointID)),
 			SportsmenID:  uuid.Must(uuid.FromString(req.SportsmenID)),
-			TimeStart:    nil,
-		}
-
-		if req.Time != "" {
-			t, err := time.Parse(time.RFC3339, req.Time)
-			newResult.TimeStart = &t
-			if err != nil {
-				responses.ERROR(w, http.StatusUnprocessableEntity, err)
-				return
-			}
+			TimeStart:    req.Time,
 		}
 
 		_, err = result.Create(*server.DB, newResult)
@@ -75,8 +64,8 @@ func AddResult(server *server.Server) http.HandlerFunc {
 		server.Dashboard.Results <- dashboard_controller.UnfinishedResultMessage{
 			ID:                   newResult.ID.String(),
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
-			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
-			TimeStart:            newResult.TimeStart.String(),
+			SportsmenStartNumber: sportsmenFetched.StartNumber,
+			TimeStart:            newResult.TimeStart,
 		}
 
 		responses.JSON(w, http.StatusOK, nil)
@@ -109,12 +98,6 @@ func AddFinishTime(server *server.Server) http.HandlerFunc {
 			return
 		}
 
-		time, err := time.Parse(time.RFC3339, req.Time)
-		if err != nil {
-			responses.ERROR(w, http.StatusUnprocessableEntity, err)
-			return
-		}
-
 		version := uint32(1)
 		resultUnfinished, err := result.GetUnfinishedResult(*server.DB, req.CheckpointID, req.SportsmenID, &version)
 		if err != nil {
@@ -137,8 +120,8 @@ func AddFinishTime(server *server.Server) http.HandlerFunc {
 		server.Dashboard.Finish <- dashboard_controller.FinishedResultMessage{
 			ID:                   resultUnfinished.ID.String(),
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
-			SportsmenStartNumber: strconv.Itoa(int(sportsmenFetched.StartNumber)),
-			TimeFinish:           time.String(),
+			SportsmenStartNumber: sportsmenFetched.StartNumber,
+			TimeFinish:           req.Time,
 		}
 
 		responses.JSON(w, http.StatusOK, nil)

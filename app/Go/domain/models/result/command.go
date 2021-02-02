@@ -20,6 +20,18 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreatedEvent, error
 		return nil, err
 	}
 
+	err := db.Model(Result{}).Where(
+		"checkpoint_id = ? AND sportsmen_id = ? AND time_start = ?",
+		pendingResult.CheckpointID,
+		pendingResult.SportsmenID,
+		pendingResult.TimeStart,
+	).Take(&Result{}).Error
+	if err == nil {
+		return nil, AlreadyExists{}
+	} else if !gorm.IsRecordNotFoundError(err) {
+		return nil, err
+	}
+
 	newResult := Result{
 		ID:           pendingResult.ID,
 		CheckpointID: pendingResult.CheckpointID,
@@ -42,12 +54,25 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreatedEvent, error
 		ResultID:     newResult.ID.String(),
 		CheckpointID: newResult.CheckpointID.String(),
 		SportsmenID:  newResult.SportsmenID.String(),
-		TimeStart:    newResult.TimeStart.String(),
+		TimeStart:    newResult.TimeStart,
 		Version:      1,
 	}, nil
 }
 
-func AddFinishTime(db gorm.DB, finishTime string, unfinishedResult UnfinishedResult) (*ResultFinishedEvent, error) {
+func AddFinishTime(db gorm.DB, finishTime int64, unfinishedResult UnfinishedResult) (*ResultFinishedEvent, error) {
+	err := db.Model(Result{}).Where(
+		"checkpoint_id = ? AND sportsmen_id = ? AND time_start = ? AND time_finish = ?",
+		unfinishedResult.CheckpointID,
+		unfinishedResult.SportsmenID,
+		unfinishedResult.TimeStart,
+		finishTime,
+	).Take(&Result{}).Error
+	if err == nil {
+		return nil, AlreadyExists{}
+	} else if !gorm.IsRecordNotFoundError(err) {
+		return nil, err
+	}
+
 	// Update attributes with `struct`, will only update non-zero fields.
 	// Update attributes with `map` instead.
 	// https://gorm.io/docs/update.html#Updates-multiple-columns

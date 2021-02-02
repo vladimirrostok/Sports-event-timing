@@ -7,13 +7,13 @@ message ResultCreatedEvent {
   string ResultID = 1;
   string CheckpointID = 2;
   string SportsmenID = 3;
-  string TimeStart = 4;
-  string TimeFinish = 5;
+  int64 TimeStart = 4;
+  int64 TimeFinish = 5;
   uint32 Version = 255;
 }
 
 message ResultFinishedEvent {
   string ResultID = 1;
-  string TimeFinish = 2;
+  int64 TimeFinish = 2;
   uint32 Version = 255;
 }
