@@ -68,14 +68,14 @@ var _ = Describe("Managing sportsmens", func() {
 
 			Specify("the sportsmen returned", func() {
 				v := uint32(1)
-				sportsmen, err := sportsmen.GetSportsmen(*db, sportsmenID, &v)
+				fetched, err := sportsmen.GetSportsmen(*db, sportsmenID, &v)
 				Expect(err).To(BeNil())
 
-				Expect(sportsmen.ID).To(Equal(sportsmenID))
-				Expect(sportsmen.FirstName).To(Equal(sampleData.FirstName))
-				Expect(sportsmen.LastName).To(Equal(sampleData.LastName))
-				Expect(sportsmen.StartNumber).To(Equal(sampleData.StartNumber))
-				Expect(sportsmen.Version).To(Equal(uint32(1)))
+				Expect(fetched.ID).To(Equal(sportsmenID))
+				Expect(fetched.FirstName).To(Equal(sampleData.FirstName))
+				Expect(fetched.LastName).To(Equal(sampleData.LastName))
+				Expect(fetched.StartNumber).To(Equal(sampleData.StartNumber))
+				Expect(fetched.Version).To(Equal(uint32(1)))
 			})
 		})
 	})

@@ -64,12 +64,12 @@ var _ = Describe("Managing checkpoints", func() {
 
 			Specify("the checkpoint returned", func() {
 				v := uint32(1)
-				checkpointFetched, err := checkpoint.GetCheckpoint(*db, checkpointID, &v)
+				fetched, err := checkpoint.GetCheckpoint(*db, checkpointID, &v)
 				Expect(err).To(BeNil())
 
-				Expect(checkpointFetched.ID).To(Equal(checkpointID))
-				Expect(checkpointFetched.Name).To(Equal(sampleData.Name))
-				Expect(checkpointFetched.Version).To(Equal(uint32(1)))
+				Expect(fetched.ID).To(Equal(checkpointID))
+				Expect(fetched.Name).To(Equal(sampleData.Name))
+				Expect(fetched.Version).To(Equal(uint32(1)))
 			})
 		})
 	})
