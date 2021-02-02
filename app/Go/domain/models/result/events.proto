@@ -8,7 +8,6 @@ message ResultCreatedEvent {
   string CheckpointID = 2;
   string SportsmenID = 3;
   int64 TimeStart = 4;
-  int64 TimeFinish = 5;
   uint32 Version = 255;
 }
 

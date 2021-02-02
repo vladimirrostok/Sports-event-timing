@@ -21,10 +21,9 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreatedEvent, error
 	}
 
 	err := db.Model(Result{}).Where(
-		"checkpoint_id = ? AND sportsmen_id = ? AND time_start = ?",
+		"checkpoint_id = ? AND sportsmen_id = ?",
 		pendingResult.CheckpointID,
 		pendingResult.SportsmenID,
-		pendingResult.TimeStart,
 	).Take(&Result{}).Error
 	if err == nil {
 		return nil, AlreadyExists{}
@@ -68,7 +67,7 @@ func AddFinishTime(db gorm.DB, finishTime int64, unfinishedResult UnfinishedResu
 		finishTime,
 	).Take(&Result{}).Error
 	if err == nil {
-		return nil, AlreadyExists{}
+		return nil, AlreadyFinished{}
 	} else if !gorm.IsRecordNotFoundError(err) {
 		return nil, err
 	}
