@@ -5,7 +5,7 @@ type ResultMessage struct {
 	SportsmenStartNumber uint32 `json:"start_number"`
 	SportsmenName        string `json:"name"`
 	TimeStart            int64  `json:"time_start"`
-	TimeFinish           int64  `json:"time_finish"`
+	TimeFinish           *int64 `json:"time_finish"`
 }
 
 type UnfinishedResultMessage struct {

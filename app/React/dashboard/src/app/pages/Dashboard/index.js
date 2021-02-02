@@ -11,6 +11,20 @@ const Dashboard = () => {
     (msg) => {
       const newResult = JSON.parse(msg.data);
 
+      if (newResult.time_finish) {
+        var fulldate = new Date(newResult.time_finish);
+        var formattedDate =
+          fulldate.getHours() +
+          ":" +
+          fulldate.getMinutes() +
+          ":" +
+          fulldate.getSeconds();
+        var time = formattedDate + "." + fulldate.getMilliseconds();
+        newResult.time_finish = time;
+      } else {
+        newResult.time_finish = "";
+      }
+
       // Check if a new message received has the same result ID.
       const isNew = !results.find((p) => p.id === newResult.id);
 
@@ -61,9 +75,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Sports events dashboard ({results.length} elements)</h1>
+      <h1>Sport events dashboard</h1>
       {results && <Results results={results} />}
-      {console.log(results)}
     </div>
   );
 };

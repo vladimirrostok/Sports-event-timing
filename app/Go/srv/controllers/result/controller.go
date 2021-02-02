@@ -54,6 +54,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 		if err != nil {
 			if errors.As(err, &result.AlreadyExists{}) {
 				responses.ERROR(w, http.StatusUnprocessableEntity, err)
+				return
 			} else {
 				responses.ERROR(w, http.StatusInternalServerError, err)
 				return
@@ -114,6 +115,7 @@ func AddFinishTime(server *server.Server) http.HandlerFunc {
 		if err != nil {
 			if errors.As(err, &result.AlreadyExists{}) {
 				responses.ERROR(w, http.StatusUnprocessableEntity, err)
+				return
 			} else {
 				responses.ERROR(w, http.StatusInternalServerError, err)
 				return

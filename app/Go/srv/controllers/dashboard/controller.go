@@ -72,18 +72,18 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 			return err
 		}
 
-		timeFinish := int64(0)
-		if result.TimeFinish != nil {
-			timeFinish = *result.TimeFinish
-		}
-
 		msg := ResultMessage{
 			ID:                   result.ID.String(),
 			SportsmenStartNumber: sportsmenFetched.StartNumber,
 			SportsmenName:        fmt.Sprintf("%s %s", sportsmenFetched.FirstName, sportsmenFetched.LastName),
 			TimeStart:            result.TimeStart,
-			TimeFinish:           timeFinish,
+			TimeFinish:           nil,
 		}
+
+		if result.TimeFinish != nil {
+			msg.TimeFinish = result.TimeFinish
+		}
+
 		resultsMessages = append(resultsMessages, msg)
 	}
 
@@ -142,7 +142,7 @@ func (d *Dashboard) broadcastFinish(finish *FinishedResultMessage) {
 	for index, result := range *d.LastResults {
 		if result.ID == finish.ID {
 			time := finish.TimeFinish
-			(*d.LastResults)[index].TimeFinish = time
+			(*d.LastResults)[index].TimeFinish = &time
 		}
 	}
 
