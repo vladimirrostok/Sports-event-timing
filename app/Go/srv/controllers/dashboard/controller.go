@@ -138,6 +138,14 @@ func (d *Dashboard) broadcastResult(result *UnfinishedResultMessage) {
 }
 
 func (d *Dashboard) broadcastFinish(finish *FinishedResultMessage) {
+	// Update stored results to return latest data to recently joined customers.
+	for index, result := range *d.LastResults {
+		if result.ID == finish.ID {
+			time := finish.TimeFinish
+			(*d.LastResults)[index].TimeFinish = time
+		}
+	}
+
 	zap.S().Infof("Broadcast result: %s, %s, %s",
 		finish.SportsmenStartNumber,
 		finish.SportsmenName,
