@@ -65,7 +65,11 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 	// Convert domain results into application level results.
 	// Load results from DB on app startup.
 	var resultsMessages []ResultMessage
-	for _, result := range *lastResults {
+
+	// Serve stored results in an reverse order so that the latest result will come the last
+	// the last result will be placed on top of table then.
+	for i := len(*lastResults) - 1; i >= 0; i-- {
+		result := (*lastResults)[i]
 		version := uint32(1)
 		sportsmenFetched, err := sportsmen.GetSportsmen(*db, result.SportsmenID, &version)
 		if err != nil {
