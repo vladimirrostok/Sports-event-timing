@@ -104,8 +104,20 @@ func AddFinishTime(server *server.Server) http.HandlerFunc {
 			return
 		}
 
+		checkPointID, err := uuid.FromString(req.CheckpointID)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
+		SportsmenID, err := uuid.FromString(req.SportsmenID)
+		if err != nil {
+			responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			return
+		}
+
 		version := uint32(1)
-		resultUnfinished, err := result.GetUnfinishedResult(*server.DB, req.CheckpointID, req.SportsmenID, &version)
+		resultUnfinished, err := result.GetUnfinishedResult(*server.DB, checkPointID, SportsmenID, &version)
 		if err != nil {
 			responses.ERROR(w, http.StatusUnprocessableEntity, err)
 			return
