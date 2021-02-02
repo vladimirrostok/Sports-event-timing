@@ -11,7 +11,7 @@ import (
 func GetUnfinishedResult(db gorm.DB, checkpoint_id, sportsmen_id string, version *uint32) (*UnfinishedResult, error) {
 	var result Result
 
-	err := db.Model(&result).Where("checkpoint_id = ? AND sportsmen_id = ?", checkpoint_id, sportsmen_id).Take(&result).Error
+	err := db.Model(&result).Where("checkpoint_id = ? AND sportsmen_id = ? AND time_finish IS NULL", checkpoint_id, sportsmen_id).Take(&result).Error
 	if gorm.IsRecordNotFoundError(err) {
 		return nil, fmt.Errorf("Result not found: %w", NotFound{})
 	} else if version != nil && result.Version != *version {
