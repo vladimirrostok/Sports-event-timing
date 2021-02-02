@@ -31,7 +31,7 @@ const Dashboard = () => {
       // If ID is different, then append the existing results with a new row.
       // If ID is same, then grab time_finish and update existing row with the same result ID.
       if (isNew) {
-        setResults([...results, newResult]);
+        setResults([newResult, ...results]);
       } else {
         const newResults = results.map((p) =>
           p.id === newResult.id
