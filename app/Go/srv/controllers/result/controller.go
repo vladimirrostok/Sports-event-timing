@@ -2,6 +2,7 @@ package result_controller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
@@ -51,8 +52,12 @@ func AddResult(server *server.Server) http.HandlerFunc {
 
 		_, err = result.Create(*server.DB, newResult)
 		if err != nil {
-			responses.ERROR(w, http.StatusInternalServerError, err)
-			return
+			if errors.As(err, &result.AlreadyExists{}) {
+				responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			} else {
+				responses.ERROR(w, http.StatusInternalServerError, err)
+				return
+			}
 		}
 
 		version := uint32(1)
@@ -107,8 +112,12 @@ func AddFinishTime(server *server.Server) http.HandlerFunc {
 
 		_, err = result.AddFinishTime(*server.DB, req.Time, *resultUnfinished)
 		if err != nil {
-			responses.ERROR(w, http.StatusInternalServerError, err)
-			return
+			if errors.As(err, &result.AlreadyExists{}) {
+				responses.ERROR(w, http.StatusUnprocessableEntity, err)
+			} else {
+				responses.ERROR(w, http.StatusInternalServerError, err)
+				return
+			}
 		}
 
 		version = uint32(1)

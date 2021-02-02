@@ -81,7 +81,6 @@ func AddFinishTime(db gorm.DB, finishTime int64, unfinishedResult UnfinishedResu
 			unfinishedResult.ID,
 			1,
 		).Updates(map[string]interface{}{"time_finish": finishTime, "version": unfinishedResult.Version + 1})
-
 	if result.Error != nil {
 		return nil, fmt.Errorf("Error adding finish time to the result: %w", result.Error)
 	} else if result.RowsAffected != 1 {
