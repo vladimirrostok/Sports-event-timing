@@ -15,6 +15,7 @@ require (
 	github.com/nxadm/tail v1.4.6 // indirect
 	github.com/onsi/ginkgo v1.15.0
 	github.com/onsi/gomega v1.10.5
+	github.com/posener/wstest v1.2.0 // indirect
 	github.com/spf13/viper v1.7.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c // indirect
