@@ -10,6 +10,7 @@ import (
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+	"sports/backend/domain/models/checkpoint"
 	"sports/backend/domain/models/result"
 	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/controllers/dashboard"
@@ -52,7 +53,7 @@ func AddResult(server *server.Server) http.HandlerFunc {
 
 		_, err = result.Create(*server.DB, newResult)
 		if err != nil {
-			if errors.As(err, &result.AlreadyExists{}) {
+			if (errors.As(err, &result.AlreadyExists{})) || (errors.As(err, &checkpoint.NotFound{})) || (errors.As(err, &sportsmen.NotFound{})) {
 				responses.ERROR(w, http.StatusUnprocessableEntity, err)
 				return
 			} else {

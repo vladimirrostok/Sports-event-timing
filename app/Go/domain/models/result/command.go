@@ -6,6 +6,8 @@ import (
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/jinzhu/gorm"
 	domain_errors "sports/backend/domain/errors"
+	"sports/backend/domain/models/checkpoint"
+	"sports/backend/domain/models/sportsmen"
 )
 
 // Create a new result.
@@ -29,6 +31,22 @@ func Create(db gorm.DB, pendingResult PendingResult) (*ResultCreatedEvent, error
 		return nil, AlreadyExists{}
 	} else if !gorm.IsRecordNotFoundError(err) {
 		return nil, err
+	}
+
+	err = db.Model(&checkpoint.Checkpoint{}).Where(
+		"id = ?",
+		pendingResult.CheckpointID,
+	).Take(&checkpoint.Checkpoint{}).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, checkpoint.NotFound{}
+	}
+
+	err = db.Model(&sportsmen.Sportsmen{}).Where(
+		"id = ?",
+		pendingResult.SportsmenID,
+	).Take(&sportsmen.Sportsmen{}).Error
+	if gorm.IsRecordNotFoundError(err) {
+		return nil, sportsmen.NotFound{}
 	}
 
 	newResult := Result{
