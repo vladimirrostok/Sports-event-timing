@@ -21,6 +21,7 @@ DDD (Domain Driven Development) - common Go directory with the shared domain det
 The "stateful" look like models are used to mitigate type errors and make code look more like a written documentation, this reduces the layer of abstraction, that's what the DDD is about.
 
 BDD (Behavior-driven Development) - tests were done the BDD style with Ginkgo/Gomega.
+Same DB connection for tests asynchronous might cause data interference, for that the Dashboard WebSocket module tests are running inside the transactions. For that reason the WebSocket module tests initiate different DB connections so that they will use different transactions as well and data interference will be impossible.
 
 Monorepo - separation of concerns, backend and frontend code is located in different directories, while the docker-compose allows to make one-liner deployment.
 
