@@ -11,34 +11,37 @@ const Dashboard = () => {
     (msg) => {
       const newResult = JSON.parse(msg.data);
 
-      if (newResult.time_finish) {
-        var fulldate = new Date(newResult.time_finish);
-        var formattedDate =
-          fulldate.getHours() +
-          ":" +
-          fulldate.getMinutes() +
-          ":" +
-          fulldate.getSeconds();
-        var time = formattedDate + "." + fulldate.getMilliseconds();
-        newResult.time_finish = time;
-      } else {
-        newResult.time_finish = "";
-      }
+      // Handle null message which may come from the server when there are no results available
+      if (newResult != null) {
+        if (newResult.time_finish) {
+          var fulldate = new Date(newResult.time_finish);
+          var formattedDate =
+            fulldate.getHours() +
+            ":" +
+            fulldate.getMinutes() +
+            ":" +
+            fulldate.getSeconds();
+          var time = formattedDate + "." + fulldate.getMilliseconds();
+          newResult.time_finish = time;
+        } else {
+          newResult.time_finish = "";
+        }
 
-      // Check if a new message received has the same result ID.
-      const isNew = !results.find((p) => p.id === newResult.id);
+        // Check if a new message received has the same result ID.
+        const isNew = !results.find((p) => p.id === newResult.id);
 
-      // If ID is different, then append the existing results with a new row.
-      // If ID is same, then grab time_finish and update existing row with the same result ID.
-      if (isNew) {
-        setResults([newResult, ...results]);
-      } else {
-        const newResults = results.map((p) =>
-          p.id === newResult.id
-            ? { ...p, time_finish: newResult.time_finish }
-            : p
-        );
-        setResults(newResults);
+        // If ID is different, then append the existing results with a new row.
+        // If ID is same, then grab time_finish and update existing row with the same result ID.
+        if (isNew) {
+          setResults([newResult, ...results]);
+        } else {
+          const newResults = results.map((p) =>
+            p.id === newResult.id
+              ? { ...p, time_finish: newResult.time_finish }
+              : p
+          );
+          setResults(newResults);
+        }
       }
     },
     [results, setResults]

@@ -47,8 +47,12 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 		Global: d,
 	}
 
-	for _, msg := range *d.LastResults {
-		conn.WriteResult(&msg)
+	if *d.LastResults != nil {
+		for _, msg := range *d.LastResults {
+			conn.WriteResult(&msg)
+		}
+	} else {
+		conn.WriteResult(nil)
 	}
 
 	d.Join <- conn
