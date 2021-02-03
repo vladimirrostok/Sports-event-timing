@@ -48,9 +48,7 @@ func (d *Dashboard) ResultsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if *d.LastResults != nil {
-		for _, msg := range *d.LastResults {
-			conn.WriteResult(&msg)
-		}
+		conn.WriteAllCurrentResults(d.LastResults)
 	} else {
 		conn.WriteResult(nil)
 	}
