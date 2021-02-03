@@ -158,7 +158,6 @@ var _ = Describe("Managing results", func() {
 				Expect((*fetched)[7].TimeStart).To(Equal(int64(13)))
 				Expect((*fetched)[8].TimeStart).To(Equal(int64(12)))
 				Expect((*fetched)[9].TimeStart).To(Equal(int64(11)))
-
 			})
 		})
 	})

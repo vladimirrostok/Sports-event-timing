@@ -44,12 +44,12 @@ func AddSportsmen(server *server.Server) http.HandlerFunc {
 			LastName:    req.LastName,
 		}
 
-		sportsmenCreated, err := sportsmen.Create(*server.DB, newSportsmen)
+		sportsmenCreatedEvent, err := sportsmen.Create(*server.DB, newSportsmen)
 		if err != nil {
 			responses.ERROR(w, http.StatusInternalServerError, err)
 			return
 		}
 
-		responses.JSON(w, http.StatusOK, sportsmenCreated.SportsmenID)
+		responses.JSON(w, http.StatusOK, CreatedResponse{ID: sportsmenCreatedEvent.SportsmenID})
 	}
 }

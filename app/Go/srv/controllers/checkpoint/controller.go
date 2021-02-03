@@ -46,6 +46,6 @@ func AddCheckpoint(server *server.Server) http.HandlerFunc {
 			return
 		}
 
-		responses.JSON(w, http.StatusOK, checkpointCreatedEvent.CheckpointID)
+		responses.JSON(w, http.StatusOK, CreatedResponse{ID: checkpointCreatedEvent.CheckpointID})
 	}
 }
