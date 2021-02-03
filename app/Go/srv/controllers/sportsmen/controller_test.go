@@ -98,13 +98,13 @@ var _ = Describe("Sportsmens controller", func() {
 				}
 
 				for _, s := range samples {
-					loginRequest := NewSportsmenRequest{
+					newReq := NewSportsmenRequest{
 						StartNumber: s.startNumber,
 						FirstName:   s.firstName,
 						LastName:    s.lastName,
 					}
 
-					requestBody, err := json.Marshal(loginRequest)
+					requestBody, err := json.Marshal(newReq)
 					Expect(err).To(gomega.BeNil())
 
 					req, err := http.NewRequest("POST", "/sportsmens", bytes.NewBufferString(string(requestBody)))

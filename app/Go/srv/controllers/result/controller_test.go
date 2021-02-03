@@ -192,13 +192,13 @@ var _ = Describe("Results controller", func() {
 				}
 
 				for _, s := range samples {
-					loginRequest := NewResultRequest{
+					newReq := NewResultRequest{
 						CheckpointID: s.CheckpointID,
 						SportsmenID:  s.SportsmenID,
 						Time:         s.Time,
 					}
 
-					requestBody, err := json.Marshal(loginRequest)
+					requestBody, err := json.Marshal(newReq)
 					Expect(err).To(gomega.BeNil())
 
 					req, err := http.NewRequest("POST", "/results", bytes.NewBufferString(string(requestBody)))
@@ -328,13 +328,13 @@ var _ = Describe("Results controller", func() {
 				}
 
 				for _, s := range samples {
-					loginRequest := FinishRequest{
+					newReq := FinishRequest{
 						CheckpointID: s.CheckpointID,
 						SportsmenID:  s.SportsmenID,
 						Time:         s.Time,
 					}
 
-					requestBody, err := json.Marshal(loginRequest)
+					requestBody, err := json.Marshal(newReq)
 					Expect(err).To(gomega.BeNil())
 
 					req, err := http.NewRequest("POST", "/results", bytes.NewBufferString(string(requestBody)))
