@@ -241,18 +241,18 @@ var _ = Describe("Results controller", func() {
 				// Make sure results and ORDER of results is correct too.
 				Expect(resultsReceived).To(Equal([]dashboard_controller.ResultMessage{
 					{
-						ID:                   finishedResult.ID.String(),
-						SportsmenStartNumber: pendingSportsmen2.StartNumber,
-						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen2.FirstName, pendingSportsmen2.LastName),
-						TimeStart:            finishedResult.TimeStart,
-						TimeFinish:           finishedResult.TimeFinish,
-					},
-					{
 						ID:                   unfinishedResult.ID.String(),
 						SportsmenStartNumber: pendingSportsmen.StartNumber,
 						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen.FirstName, pendingSportsmen.LastName),
 						TimeStart:            unfinishedResult.TimeStart,
 						TimeFinish:           nil,
+					},
+					{
+						ID:                   finishedResult.ID.String(),
+						SportsmenStartNumber: pendingSportsmen2.StartNumber,
+						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen2.FirstName, pendingSportsmen2.LastName),
+						TimeStart:            finishedResult.TimeStart,
+						TimeFinish:           finishedResult.TimeFinish,
 					},
 				}))
 
