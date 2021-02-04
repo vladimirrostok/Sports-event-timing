@@ -1,16 +1,27 @@
+#Real-time WebSocket sport events dashboard
+
+The entire solution is packed into Docker, docker-compose.yaml starts up the application, docker-compose.test.yaml runs tests only, separate `Dockerfile` and `Dockerfile.test` & `Docker-compose.yaml` and `Docker-compose.test.yaml` were used for this purpose, they use different databases. Dockerized app contains PostgreSQL, pgAdmin, Golang backend + demo client, React application. 
+
+# Starting the project
+
+Execute the following commands under `/app` directory:
+
+#### - Run the application: `docker-compose up --build`
+####- Run tests: `docker-compose -f .\docker-compose.test.yaml -p ci up --build`
+
 # Important setup step
 
-self-signed certificates used in this solution, browser will block frontend request to backend, in order to add cert into browser exceptions:
+self-signed certificates used in this solution, browser will block frontend request to backend, in order to add a cert into browser exceptions:
 1) Open web-browser
 2) Go to https://localhost:8000/
-3) Click "Accept risk and continue" that will add the certificate into expections
+3) Click "Accept risk and continue" that will add the certificate into exceptions
 
 # To-do things
 Cached results flushing (out of scope for now).
 * Remove old results from the frontend state
-* Remove old results from the Go backend latest results slice
+* Remove old results from the Go backend the latest results slice
 
-Simplest implementation is to delete/overwrite older results indexes when there are e.g. more than 1000 values.
+The Simplest implementation is to delete/overwrite older results indexes when there are e.g. more than 1000 values.
 
 # Structure and approach
 ## Backend
@@ -35,7 +46,7 @@ crt.crt and key.key are required to run the server in TLS, moving API under the 
 
 GORM - ORM used in Go project for database migration easiness. 
 
-Protobuf - protobufs for events, so that it would be easy to integrate any RPC/message-queue services.
+Protobuf - protobuf for events, so that it would be easy to integrate any RPC/message-queue services.
 
 Context for the server graceful shutdown and channels to write errors from goroutines back to the main method and handle them there.
 

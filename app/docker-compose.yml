@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  # Depend on live-postgres healthcheck to run after DB has been started.
+  backend:
+    container_name: backend
+    build:
+      context: ./Go
+      dockerfile: srv/Dockerfile
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - srv:/usr/src/app/
+    depends_on:
+      live-postgres:
+        condition: service_healthy
+    networks:
+      - monorepo_network
+
+  react:
+    container_name: react
+    build:
+      context: ./React/dashboard
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    stdin_open: true
+    volumes:
+      - './:/app'
+      - '/app/node_modules'
+    networks:
+      - monorepo_network
+
+ # Use healthcheck to let backend know when the db is up.
+  live-postgres:
+    image: postgres:latest
+    container_name: live_db_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=sport_events
+      - DATABASE_HOST=live-postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - monorepo_network
+    healthcheck:
+      test: "exit 0"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    depends_on:
+      - live-postgres
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    networks:
+      - monorepo_network
+
+
+volumes:
+  srv:
+  database_postgres:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  monorepo_network:
+    driver: bridge

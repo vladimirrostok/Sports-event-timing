@@ -12,9 +12,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"sports/backend/domain/models/checkpoint"
-	"sports/backend/domain/models/result"
-	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/cmd/config"
 	"sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/routes"
@@ -83,16 +80,6 @@ func initializeAPI(server *server.Server, driver, username, password, port, host
 	if err != nil {
 		return err
 	}
-
-	// Database migration
-	server.DB.AutoMigrate(
-		&result.Result{},
-		&checkpoint.Checkpoint{},
-		&sportsmen.Sportsmen{},
-	)
-
-	server.DB.Model(&result.Result{}).AddForeignKey("checkpoint_id", "checkpoints(id)", "RESTRICT", "RESTRICT")
-	server.DB.Model(&result.Result{}).AddForeignKey("sportsmen_id", "sportsmens(id)", "RESTRICT", "RESTRICT")
 
 	server.Router = mux.NewRouter()
 	routes.InitializeRoutes(server)

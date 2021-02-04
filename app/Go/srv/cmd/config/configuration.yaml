@@ -1,5 +1,5 @@
 ---
-db_host: localhost
+db_host: live-postgres
 db_driver: postgres
 db_username: postgres
 db_password: root
