@@ -70,8 +70,7 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 
 	// Serve stored results in an reverse order so that the latest result will come the last
 	// the last result will be placed on top of table then.
-	for i := len(*lastResults) - 1; i >= 0; i-- {
-		result := (*lastResults)[i]
+	for _, result := range *lastResults {
 		version := uint32(1)
 		sportsmenFetched, err := sportsmen.GetSportsmen(*db, result.SportsmenID, &version)
 		if err != nil {
@@ -112,7 +111,7 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 func (d *Dashboard) add(conn *Connection) {
 	if _, usr := d.ConnHub[conn.Name]; !usr {
 		d.ConnHub[conn.Name] = conn
-		zap.S().Info("%s joined the chat", conn.Name)
+		zap.S().Info("%s joined the dashboard", conn.Name)
 	}
 }
 
