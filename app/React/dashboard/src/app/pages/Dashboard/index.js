@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Results from "../../components/Results";
-
-const baseURL = "wss://localhost:8000/dashboard";
+import baseURL from "../../../config";
 
 const Dashboard = () => {
   const [results, setResults] = useState([]);
@@ -24,10 +23,18 @@ const Dashboard = () => {
           }
         }
 
+        // If message came then it's not an array and cannot be iterated properly, handle that case.
+        if(!Array.isArray(data) && data.time_finish){
+          var fulldate = new Date(data.time_finish);
+          data.time_finish = `${fulldate.getHours()}:${fulldate.getMinutes()}:${fulldate.getSeconds()}.${fulldate.getMilliseconds()}`;
+        }
+
         // If there are no results on page yet, use all data from the server.
         if (!results.length) {
           // If it's initial data then it's array, if that's a message then it's object.
           if (Array.isArray(data)) {
+            // Sort all the results by time_start in descending order.
+            data.sort((a, b) => parseInt(b.time_start) - parseInt(a.time_start));
             setResults(data);
           } else {
             setResults([data, ...results]);
