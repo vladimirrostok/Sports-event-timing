@@ -1,4 +1,4 @@
-// protoc --gofast_out=. events.proto
+// protoc --gofast_out=. result.proto
 syntax = "proto3";
 
 package result;
