@@ -1,4 +1,4 @@
-#Real-time WebSocket sport events dashboard
+# Real-time WebSocket sport events dashboard
 
 The entire solution is packed into Docker, docker-compose.yaml starts up the application, docker-compose.test.yaml runs tests only, separate `Dockerfile` and `Dockerfile.test` & `Docker-compose.yaml` and `Docker-compose.test.yaml` were used for this purpose, they use different databases. Dockerized app contains PostgreSQL, pgAdmin, Golang backend + demo client, React application. 
 
@@ -10,7 +10,7 @@ Execute the following commands under `/app` directory:
 This will install and migrate the database, server, demo client, and the React application.
 React application is accessible at http://localhost:3000/
 
-####- Run tests: `docker-compose -f .\docker-compose.test.yaml up --build`
+#### - Run tests: `docker-compose -f .\docker-compose.test.yaml up --build`
 This will run all the test against the test database inside transactions.
 
 # Important setup step
@@ -25,7 +25,7 @@ Cached results flushing (out of scope for now).
 * Remove old results from the frontend state
 * Remove old results from the Go backend the latest results slice
 
-The Simplest implementation is to delete/overwrite older results indexes when there are e.g. more than 1000 values.
+The Simplest implementation is to delete/overwrite older results indexes when there are e.g. more than 1000 values, but the real load is not clear yet, so these are my assumptions.
 
 # Structure and approach
 ## Backend
@@ -56,7 +56,7 @@ Context for the server graceful shutdown and channels to write errors from gorou
 
 Transactions - tests are running in transactions and rollback is performed after, so that the db won't get polluted with test data.
 
+Domain errors - custom error types are providing much more information regarding the states, and helps re-using the codebase for error handling.
 ## Frontend
 
 As the dashboard is the only component used in app the state management was implemented with built-in React state, effects and hooks.
-
