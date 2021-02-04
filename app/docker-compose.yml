@@ -17,6 +17,25 @@ services:
         condition: service_healthy
     networks:
       - monorepo_network
+    healthcheck:
+      test: "exit 0"
+
+    # Depend on live-postgres healthcheck to run after DB has been started.
+  demo:
+    container_name: demo_client
+    build:
+      context: ./Go
+      dockerfile: client/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - srv:/usr/src/app/
+    depends_on:
+      backend:
+        condition: service_healthy
+      live-postgres:
+        condition: service_healthy
+    networks:
+      - monorepo_network
 
   react:
     container_name: react
@@ -26,6 +45,9 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
     stdin_open: true
     volumes:
       - './:/app'

@@ -25,7 +25,7 @@ const Dashboard = () => {
 
         // If message came then it's not an array and cannot be iterated properly, handle that case.
         if(!Array.isArray(data) && data.time_finish){
-          var fulldate = new Date(data.time_finish);
+          fulldate = new Date(data.time_finish);
           data.time_finish = `${fulldate.getHours()}:${fulldate.getMinutes()}:${fulldate.getSeconds()}.${fulldate.getMilliseconds()}`;
         }
 

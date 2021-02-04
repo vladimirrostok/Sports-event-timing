@@ -21,7 +21,7 @@ type id struct {
 }
 
 func main() {
-	addr := "https://localhost:8000"
+	addr := "https://backend:8000"
 	currentNum := uint32(1)
 
 	// Provide the default source to a deterministic state.

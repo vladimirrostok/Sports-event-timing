@@ -7,11 +7,15 @@ The entire solution is packed into Docker, docker-compose.yaml starts up the app
 Execute the following commands under `/app` directory:
 
 #### - Run the application: `docker-compose up --build`
-####- Run tests: `docker-compose -f .\docker-compose.test.yaml -p ci up --build`
+This will install and migrate the database, server, demo client, and the React application.
+React application is accessible at http://localhost:3000/
+
+####- Run tests: `docker-compose -f .\docker-compose.test.yaml up --build`
+This will run all the test against the test database inside transactions.
 
 # Important setup step
 
-self-signed certificates used in this solution, browser will block frontend request to backend, in order to add a cert into browser exceptions:
+Self-signed certificates are used in this solution, browser will block frontend request to backend, in order to add a cert into browser exceptions:
 1) Open web-browser
 2) Go to https://localhost:8000/
 3) Click "Accept risk and continue" that will add the certificate into exceptions
@@ -49,6 +53,8 @@ GORM - ORM used in Go project for database migration easiness.
 Protobuf - protobuf for events, so that it would be easy to integrate any RPC/message-queue services.
 
 Context for the server graceful shutdown and channels to write errors from goroutines back to the main method and handle them there.
+
+Transactions - tests are running in transactions and rollback is performed after, so that the db won't get polluted with test data.
 
 ## Frontend
 
