@@ -12,6 +12,7 @@ import (
 	checkpoint_controller "sports/backend/srv/controllers/checkpoint"
 	result_controller "sports/backend/srv/controllers/result"
 	sportsmen_controller "sports/backend/srv/controllers/sportsmen"
+	"sports/backend/srv/utils"
 	"strconv"
 	"time"
 )
@@ -96,7 +97,7 @@ func main() {
 		newResultRequest := result_controller.NewResultRequest{
 			SportsmenID:  sportsmenID.ID,
 			CheckpointID: checkPointID.ID,
-			Time:         makeTimestamp(),
+			Time:         utils.MakeTimestampInMilliseconds(),
 		}
 
 		requestBody, err = json.Marshal(newResultRequest)
@@ -119,7 +120,7 @@ func main() {
 		newFinishRequest := result_controller.FinishRequest{
 			SportsmenID:  sportsmenID.ID,
 			CheckpointID: checkPointID.ID,
-			Time:         makeTimestamp(),
+			Time:         utils.MakeTimestampInMilliseconds(),
 		}
 
 		requestBody, err = json.Marshal(newFinishRequest)
@@ -139,6 +140,3 @@ func main() {
 	}
 }
 
-func makeTimestamp() int64 {
-	return (time.Now().UnixNano() / int64(time.Millisecond))
-}

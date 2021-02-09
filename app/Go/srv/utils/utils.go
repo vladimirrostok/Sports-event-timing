@@ -8,6 +8,7 @@ import (
 	"sports/backend/domain/models/checkpoint"
 	"sports/backend/domain/models/result"
 	"sports/backend/domain/models/sportsmen"
+	"time"
 )
 
 // GetDBConnection with the given configuration details.
@@ -33,4 +34,10 @@ func GetDBConnection(driver, username, password, port, host, database string) (*
 	db.Model(&result.Result{}).AddForeignKey("sportsmen_id", "sportsmens(id)", "RESTRICT", "RESTRICT")
 
 	return db, nil
+}
+
+// Get Time in milliseconds.
+// Reference to example here https://gobyexample.com/epoch .
+func MakeTimestampInMilliseconds() int64 {
+	return (time.Now().UnixNano() / int64(time.Millisecond))
 }

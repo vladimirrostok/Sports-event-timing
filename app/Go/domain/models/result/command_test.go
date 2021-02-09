@@ -14,7 +14,6 @@ import (
 	"sports/backend/domain/models/sportsmen"
 	"sports/backend/srv/cmd/config"
 	"sports/backend/srv/utils"
-	"time"
 )
 
 var _ = Describe("Managing results", func() {
@@ -75,7 +74,7 @@ var _ = Describe("Managing results", func() {
 				ID:           uuid.Must(uuid.NewV4()),
 				CheckpointID: pendingCheckpoint.ID,
 				SportsmenID:  pendingSportsmen.ID,
-				TimeStart:    time.Now().Unix(),
+				TimeStart:    utils.MakeTimestampInMilliseconds(),
 			}
 		})
 
@@ -152,7 +151,7 @@ var _ = Describe("Managing results", func() {
 				ID:           uuid.Must(uuid.NewV4()),
 				CheckpointID: pendingCheckpoint.ID,
 				SportsmenID:  pendingSportsmen.ID,
-				TimeStart:    time.Now().Unix(),
+				TimeStart:    utils.MakeTimestampInMilliseconds(),
 			}
 
 			_, err = result.Create(*db, pendingResult)
@@ -173,7 +172,7 @@ var _ = Describe("Managing results", func() {
 
 		When("the result is updated", func() {
 			Specify("the returned event", func() {
-				time := time.Now().Unix()
+				time := utils.MakeTimestampInMilliseconds()
 				event, err := result.AddFinishTime(*db, time, unfinishedResult)
 				Expect(err).To(BeNil())
 
@@ -185,7 +184,7 @@ var _ = Describe("Managing results", func() {
 			})
 
 			Specify("the result is persisted in the database", func() {
-				time := time.Now().Unix()
+				time := utils.MakeTimestampInMilliseconds()
 				_, err := result.AddFinishTime(*db, time, unfinishedResult)
 				Expect(err).To(BeNil())
 
@@ -204,7 +203,7 @@ var _ = Describe("Managing results", func() {
 
 		When("the finished result already exists", func() {
 			Specify("the error returned is of AlreadyFinished domain error type", func() {
-				time := time.Now().Unix()
+				time := utils.MakeTimestampInMilliseconds()
 				_, err := result.AddFinishTime(*db, time, unfinishedResult)
 				Expect(err).To(BeNil())
 

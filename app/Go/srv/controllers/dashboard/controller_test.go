@@ -169,7 +169,7 @@ var _ = Describe("Results controller", func() {
 					ID:           uuid.Must(uuid.NewV4()),
 					CheckpointID: pendingCheckpoint.ID,
 					SportsmenID:  pendingSportsmen.ID,
-					TimeStart:    time.Now().Unix(),
+					TimeStart:    utils.MakeTimestampInMilliseconds(),
 				}
 
 				unfinishedResult.ID = pendingResult.ID
@@ -187,7 +187,7 @@ var _ = Describe("Results controller", func() {
 					ID:           uuid.Must(uuid.NewV4()),
 					CheckpointID: pendingCheckpoint.ID,
 					SportsmenID:  pendingSportsmen2.ID,
-					TimeStart:    time.Now().Unix(),
+					TimeStart:    utils.MakeTimestampInMilliseconds(),
 				}
 
 				_, err = result.Create(*db, pendingResult2)
@@ -201,7 +201,7 @@ var _ = Describe("Results controller", func() {
 					Version:      1,
 				}
 
-				timeFinish := time.Now().Unix()
+				timeFinish := utils.MakeTimestampInMilliseconds()
 				finishedResult.ID = pendingResult2.ID
 				finishedResult.SportsmenID = pendingResult2.SportsmenID
 				finishedResult.CheckpointID = pendingResult2.CheckpointID
@@ -241,18 +241,18 @@ var _ = Describe("Results controller", func() {
 				// Make sure results and ORDER of results is correct too.
 				Expect(resultsReceived).To(Equal([]dashboard_controller.ResultMessage{
 					{
-						ID:                   unfinishedResult.ID.String(),
-						SportsmenStartNumber: pendingSportsmen.StartNumber,
-						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen.FirstName, pendingSportsmen.LastName),
-						TimeStart:            unfinishedResult.TimeStart,
-						TimeFinish:           nil,
-					},
-					{
 						ID:                   finishedResult.ID.String(),
 						SportsmenStartNumber: pendingSportsmen2.StartNumber,
 						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen2.FirstName, pendingSportsmen2.LastName),
 						TimeStart:            finishedResult.TimeStart,
 						TimeFinish:           finishedResult.TimeFinish,
+					},
+					{
+						ID:                   unfinishedResult.ID.String(),
+						SportsmenStartNumber: pendingSportsmen.StartNumber,
+						SportsmenName:        fmt.Sprintf("%s %s", pendingSportsmen.FirstName, pendingSportsmen.LastName),
+						TimeStart:            unfinishedResult.TimeStart,
+						TimeFinish:           nil,
 					},
 				}))
 
@@ -327,7 +327,7 @@ var _ = Describe("Results controller", func() {
 				_, err = sportsmen.Create(*db, pendingSportsmen2)
 				Expect(err).To(BeNil())
 
-				timeFinish := time.Now().Unix()
+				timeFinish := utils.MakeTimestampInMilliseconds()
 				resultToFinish.TimeFinish = &timeFinish
 
 				// Start server after data has been created, that way server will load existing data on start.
@@ -355,7 +355,7 @@ var _ = Describe("Results controller", func() {
 				Expect(string(msg)).To(Equal("null"))
 
 				// Test new result message.
-				timeNow := time.Now().Unix()
+				timeNow := utils.MakeTimestampInMilliseconds()
 
 				newReq := result_controller.NewResultRequest{
 					CheckpointID: pendingCheckpoint.ID.String(),
@@ -403,7 +403,7 @@ var _ = Describe("Results controller", func() {
 					ID:           uuid.Must(uuid.NewV4()),
 					CheckpointID: pendingCheckpoint.ID,
 					SportsmenID:  pendingSportsmen2.ID,
-					TimeStart:    time.Now().Unix(),
+					TimeStart:    utils.MakeTimestampInMilliseconds(),
 				}
 
 				requestBody, err = json.Marshal(pendingResult2)
@@ -427,7 +427,7 @@ var _ = Describe("Results controller", func() {
 				resultToFinish.CheckpointID = pendingCheckpoint.ID
 				resultToFinish.TimeStart = pendingResult2.TimeStart
 
-				timeNow = time.Now().Unix()
+				timeNow = utils.MakeTimestampInMilliseconds()
 				resultToFinish.TimeFinish = &timeNow
 
 				finishReq := result_controller.FinishRequest{
@@ -482,7 +482,7 @@ var _ = Describe("Results controller", func() {
 				Expect(resultsArrReceived[1].SportsmenStartNumber).To(Equal(pendingSportsmen2.StartNumber))
 				Expect(resultsArrReceived[1].SportsmenName).To(Equal(fmt.Sprintf("%s %s", pendingSportsmen2.FirstName, pendingSportsmen2.LastName)))
 				Expect(resultsArrReceived[1].TimeStart).To(Equal(resultToFinish.TimeStart))
-				Expect(resultsArrReceived[1].TimeFinish).To(Equal(&newReq.Time))
+				Expect(resultsArrReceived[1].TimeFinish).To(Equal(resultToFinish.TimeFinish))
 
 				s.Close()
 				ws.Close()

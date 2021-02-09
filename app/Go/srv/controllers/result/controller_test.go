@@ -20,7 +20,6 @@ import (
 	dashboard_controller "sports/backend/srv/controllers/dashboard"
 	"sports/backend/srv/server"
 	"sports/backend/srv/utils"
-	"time"
 )
 
 var _ = Describe("Results controller", func() {
@@ -120,7 +119,7 @@ var _ = Describe("Results controller", func() {
 					ID:           uuid.Must(uuid.NewV4()),
 					CheckpointID: pendingCheckpoint1.ID,
 					SportsmenID:  pendingSportsmen1.ID,
-					TimeStart:    time.Now().Unix(),
+					TimeStart:    utils.MakeTimestampInMilliseconds(),
 				}
 
 				_, err = result.Create(*db,
@@ -128,7 +127,7 @@ var _ = Describe("Results controller", func() {
 						ID:           uuid.Must(uuid.NewV4()),
 						CheckpointID: pendingCheckpoint1.ID,
 						SportsmenID:  pendingSportsmen1.ID,
-						TimeStart:    time.Now().Unix(),
+						TimeStart:    utils.MakeTimestampInMilliseconds(),
 					})
 				Expect(err).To(BeNil())
 			})
@@ -256,7 +255,7 @@ var _ = Describe("Results controller", func() {
 					ID:           uuid.Must(uuid.NewV4()),
 					CheckpointID: pendingCheckpoint.ID,
 					SportsmenID:  pendingSportsmen.ID,
-					TimeStart:    time.Now().Unix(),
+					TimeStart:    utils.MakeTimestampInMilliseconds(),
 				}
 
 				_, err = result.Create(*db,
@@ -264,7 +263,7 @@ var _ = Describe("Results controller", func() {
 						ID:           uuid.Must(uuid.NewV4()),
 						CheckpointID: pendingCheckpoint.ID,
 						SportsmenID:  pendingSportsmen.ID,
-						TimeStart:    time.Now().Unix(),
+						TimeStart:    utils.MakeTimestampInMilliseconds(),
 					})
 				Expect(err).To(BeNil())
 			})

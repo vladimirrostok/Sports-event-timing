@@ -51,9 +51,9 @@ var _ = Describe("Managing results", func() {
 		var sportsmenID uuid.UUID
 		var checkpointID uuid.UUID
 
-		sampleTime := time.Now().Add(1 * time.Second).Unix()
+		sampleTime := time.Now().Add(1 * time.Second).UnixNano() / int64(time.Millisecond)
 		var sampleData = result.Result{
-			TimeStart:  time.Now().Unix(),
+			TimeStart:  utils.MakeTimestampInMilliseconds(),
 			TimeFinish: &sampleTime,
 		}
 
