@@ -111,7 +111,7 @@ func (d *Dashboard) Run(db *gorm.DB) error {
 func (d *Dashboard) add(conn *Connection) {
 	if _, usr := d.ConnHub[conn.Name]; !usr {
 		d.ConnHub[conn.Name] = conn
-		zap.S().Info("%s joined the dashboard", conn.Name)
+		zap.S().Infof("%s joined the dashboard", conn.Name)
 	}
 }
 
@@ -133,7 +133,7 @@ func (d *Dashboard) broadcastResult(result *UnfinishedResultMessage) {
 	updatedResults := append(*d.LastResults, resultMessage)
 	d.LastResults = &updatedResults
 
-	zap.S().Infof("Broadcast result: %s, %s, %s",
+	zap.S().Infof("Broadcast result: %d, %s, %d",
 		result.SportsmenStartNumber,
 		result.SportsmenName,
 		result.TimeStart)
@@ -151,7 +151,7 @@ func (d *Dashboard) broadcastFinish(finish *FinishedResultMessage) {
 		}
 	}
 
-	zap.S().Infof("Broadcast result: %s, %s, %s",
+	zap.S().Infof("Broadcast result: %d, %s, %d",
 		finish.SportsmenStartNumber,
 		finish.SportsmenName,
 		finish.TimeFinish)
